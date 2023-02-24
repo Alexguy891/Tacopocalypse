@@ -1,9 +1,9 @@
-// Variables
+// variables for object scrolling
 let x, y, a, b, c, d, rx, ra, rc;
 
 function setup() {
     createCanvas(720, 400);
-    // Starting location of rectangles
+    // starting location of rectangles
     x = width;
     y = height / 2;
     a = width;
@@ -15,22 +15,20 @@ function setup() {
     rc = random(5);
 }
 
-function draw() {
-    background(200);
-
-    // Draw rectangles
+function movingRectangles() {
+  // draw rectangles
     stroke(50);
     fill(100);
     rect(x, y, 120, 40);
     rect(a, b, 120, 40);
     rect(c, d, 120, 40);
 
-    // Speed
+    // speed
     x = x - rx;
     a = a - ra;
     c = c - rc;
 
-    // Reset to the right side of screen with a random speed
+    // reset to the right side of screen with a random speed
     if (x < -120) {
         rx = random(5);
         x = width;
@@ -43,4 +41,9 @@ function draw() {
         rc = random(5);
         c = width;
     }
+}
+
+function draw() {
+    background(200);
+    movingRectangles();
 }
