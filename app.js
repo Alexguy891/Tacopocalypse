@@ -1,9 +1,4 @@
-// variables for object scrolling
-let x, y, a, b, c, d, rx, ra, rc;
-
-function setup() {
-    createCanvas(720, 400);
-    // starting location of rectangles
+function movingRectanglesSetup() {
     x = width;
     y = height / 2;
     a = width;
@@ -13,6 +8,14 @@ function setup() {
     rx = random(5);
     ra = random(5);
     rc = random(5);
+}
+
+function setup() {
+    createCanvas(720, 400);
+    
+    // starting location of rectangles
+    movingRectanglesSetup();
+    
 }
 
 function movingRectangles() {
