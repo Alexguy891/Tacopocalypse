@@ -1,32 +1,50 @@
-function Runner(y, w, h) {
-    this.x = 0;
-    this.y = y;
-    this.w = 50;
-    this.h = 50;
-    this.velocity = 0;
-    this.gravity = 5;
-  
-    this.show = function() {
-        fill(100);
-        stroke(50);
-        rect(this.x, this.y, this.w, this.h)
+class RunnerEntity extends Entity {
+    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, speed, playerType) {
+        super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, true, true, livesAmount);
         
-        if(this.y + this.h < h) {
-          this.y += this.gravity;
-        }  
-      
-        this.y += this.velocity;
-        this.velocity /= 1.2;
-    
-        if(keyIsDown(RIGHT_ARROW) && this.x < w - this.w) {
-            this.x += 3;
-        } else if(keyIsDown(LEFT_ARROW) && this.x > 0) {
-            this.x -= 3;
+        // check speed and assign
+        if(speed <= 0) {
+            speed = 1;
+            console.log("Invalid speed passed to PlayerEntity.");
+        }
+        this.speed = speed;
+
+        // check playerType and assign
+        if(playerType != 0 || playerType != 1) {
+            playerType = 0;
+            console.log("Invalid playerType passed to PlayerEntity.");
         }
         
-        if(keyIsDown(UP_ARROW) && this.y + this.h >= h) {
+        // runner or server (0 or 1)
+        this.playerType = playerType;
+
+        // lives before reset
+        this.livesAmount = this.livesAmount;
+
+        // for jumping
+        this.velocity = 0;
+        this.gravity = 5;
+
+    }
+    
+    runnerShow() {
+        // show image
+        image(image, 0, 0, sizeHeight, sizeWidth);
+        
+        // for jumping
+        if(this.positionArray[1] + this.collisionArray[0]) {
+          this.positionArray[1] += this.gravity;
+        }  
+        this.positionArray[1] += this.velocity;
+        this.velocity /= 1.2;
+        
+        // spacebar jump
+        if(keyIsDown(32) && this.positionArray[1] + this.collisionHeight[0] >= height) {
             this.velocity = -25;
             keyCode = DOWN_ARROW;
         }
+
+        // loss of lives from collision
+            // code here
     }
 }

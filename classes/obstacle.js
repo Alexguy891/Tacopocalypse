@@ -1,21 +1,29 @@
-function Obstacle(w, h) {
-    this.x = w;
-    this.y = h / 2;
-    this.rx = random(5);
+class ObstacleEntity extends Entity {
+    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, hasCollision, isMovable, scrollSpeed, lifeDamage) {
+        super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, true, false);
 
-    this.show = function() {
-        // draw rectangles
-        stroke(50);
-        fill(100);
-        rect(this.x, this.y, 120, 40);
+        // speed of scroll across screen
+        if(scrollSpeed <= 0) {
+            scrollSpeed = 1;
+            console.log("Invalid scrollSpeed passed to ObstacleEntity.");
+        }
+        this.scrollSpeed = scrollSpeed
+
+        // lives taken from collision
+        if(lifeDamage < 0) {
+            lifeDamage = 0;
+            console.log("Invalid lifeDamage passed to ObstacleEntity.")
+        }
+        this.lifeDamage = lifeDamage;
+    }
+
+    show() {
+        // show image
+        image(image, 0, 0, sizeHeight, sizeWidth);
 
         // speed
-        this.x = this.x - this.rx;
-
-        // reset to the right side of screen with a random speed
-        if (this.x < -120) {
-            this.rx = random(5);
-            this.x = width;
+        if (this.x >= 0 - this.collisionArray[0]) {
+            this.positionArray[0] = this.positionArray[0] - this.scrollSpeed;
         }
     }
 }
