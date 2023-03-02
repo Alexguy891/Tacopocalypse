@@ -1,6 +1,6 @@
 class RunnerEntity extends Entity {
-    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, speed, playerType) {
-        super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, true, true, livesAmount);
+    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, speed, playerType, livesAmount) {
+        super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, true, true);
         
         // check speed and assign
         if(speed <= 0) {
@@ -19,7 +19,7 @@ class RunnerEntity extends Entity {
         this.playerType = playerType;
 
         // lives before reset
-        this.livesAmount = this.livesAmount;
+        this.livesAmount = livesAmount;
 
         // for jumping
         this.velocity = 0;
