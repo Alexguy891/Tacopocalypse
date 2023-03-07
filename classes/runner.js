@@ -1,13 +1,6 @@
 class RunnerEntity extends Entity {
-    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, speed, livesAmount) {
+    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, livesAmount) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, true, true);
-        
-        // check speed and assign
-        if(speed <= 0) {
-            speed = 1;
-            console.log("Invalid speed passed to PlayerEntity.");
-        }
-        this.speed = speed;
 
         // lives before reset
         this.livesAmount = livesAmount;
@@ -15,7 +8,6 @@ class RunnerEntity extends Entity {
         // for jumping
         this.velocity = 0;
         this.gravity = 5;
-
     }
     
     runnerShow() {
