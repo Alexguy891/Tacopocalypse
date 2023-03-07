@@ -24,6 +24,10 @@ class RunnerEntity extends Entity {
         // for jumping
         this.velocity = 0;
         this.gravity = 5;
+        
+        //for collision
+        this.isHit = false
+
 
     }
     
