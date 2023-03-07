@@ -1,5 +1,5 @@
 class RunnerEntity extends Entity {
-    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, speed, playerType, livesAmount) {
+    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, speed, livesAmount) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, true, true);
         
         // check speed and assign
@@ -8,15 +8,6 @@ class RunnerEntity extends Entity {
             console.log("Invalid speed passed to PlayerEntity.");
         }
         this.speed = speed;
-
-        // check playerType and assign
-        if(playerType != 0 || playerType != 1) {
-            playerType = 0;
-            console.log("Invalid playerType passed to PlayerEntity.");
-        }
-        
-        // runner or server (0 or 1)
-        this.playerType = playerType;
 
         // lives before reset
         this.livesAmount = livesAmount;
@@ -29,7 +20,7 @@ class RunnerEntity extends Entity {
     
     runnerShow() {
         // show image
-        image(image, 0, 0, sizeHeight, sizeWidth);
+        image(this.image, 0, 0, this.sizeHeight, this.sizeWidth);
         
         // for jumping
         if(this.positionArray[1] + this.collisionArray[0]) {
