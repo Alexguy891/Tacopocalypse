@@ -1,6 +1,9 @@
 class RunnerEntity extends Entity {
-    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, livesAmount) {
+    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, livesAmount, dead) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, true, true);
+
+        // status
+        this.dead = False;
 
         // lives before reset
         this.livesAmount = livesAmount;
@@ -8,6 +11,16 @@ class RunnerEntity extends Entity {
         // for jumping
         this.velocity = 0;
         this.gravity = 5;
+    }
+
+    // loss of lives
+    collision(ObstacleEntity) {
+        if (ObstacleEntity.collisionArray == this.collisionArray) {
+            this.livesAmount = this.livesAmount - ObstacleEntity.livesAmount;
+        }
+        if (this.livesAmount == 0) {
+            this.dead = True;
+        }
     }
     
     runnerShow() {
@@ -27,7 +40,6 @@ class RunnerEntity extends Entity {
             keyCode = DOWN_ARROW;
         }
 
-        // loss of lives from collision
-            // code here
+        
     }
 }
