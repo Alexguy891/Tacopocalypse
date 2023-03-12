@@ -1,5 +1,5 @@
 class RunnerEntity extends Entity {
-    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, livesAmount, dead) {
+    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, livesAmount) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, true, true);
 
         // status
@@ -39,7 +39,5 @@ class RunnerEntity extends Entity {
             this.velocity = -25;
             keyCode = DOWN_ARROW;
         }
-
-        
     }
 }
