@@ -1,3 +1,4 @@
+ObstacleList = [];
 class ObstacleEntity extends Entity {
     constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, hasCollision, isMovable, scrollSpeed, lifeDamage) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, true, false);
@@ -15,15 +16,18 @@ class ObstacleEntity extends Entity {
             console.log("Invalid lifeDamage passed to ObstacleEntity.")
         }
         this.lifeDamage = lifeDamage;
+      ObstacleList.push(this);
     }
 
     show() {
         // show image
-        image(image, 0, 0, sizeHeight, sizeWidth);
-
+      
+        image(this.spriteImage, this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
+      //this.positionArray[0] -= this.scrollSpeed;
         // speed
-        if (this.x >= 0 - this.collisionArray[0]) {
-            this.positionArray[0] = this.positionArray[0] - this.scrollSpeed;
-        }
+        
+      if (this.positionArray[0] + this.sizeArray[0] >= 0) {
+            this.positionArray[0] -= this.scrollSpeed;
+        }//NOTE: THIS IF IS NOT NEEDED. there is no way to delete an object in js, i think, so this is just a pointless check in here for legacy reasons.
     }
 }
