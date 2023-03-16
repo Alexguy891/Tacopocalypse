@@ -2,8 +2,8 @@ var score = 0;
 var lastHit = 0; //stores second, minute for hit detection
 
 class RunnerEntity extends Entity {
-    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, livesAmount) {
-        super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spriteImage, true, true);
+    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, livesAmount) {
+        super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, true, true);
 
         // status
         this.dead = false;
@@ -36,6 +36,8 @@ class RunnerEntity extends Entity {
     show() {
       // show image
       image(this.spriteImage, this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
+      // fill(51);
+      // rect(this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
 
       //basic hud
       text('lives: '+ this.livesAmount, 10, 30);
