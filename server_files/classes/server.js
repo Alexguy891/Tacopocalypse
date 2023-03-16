@@ -1,5 +1,5 @@
 class Ingredient extends Entity {
-  constructor (posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, hasCollision, isMovable, name, cookingTime) {
+  constructor (posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, name, cookingTime) {
       super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, false, true);
 
       // ingredient name
@@ -19,7 +19,7 @@ class Ingredient extends Entity {
 
   // displays ingredient
   show() {
-      image(this.image, this.x, this.y);
+    image(this.spriteImage, this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
   }
 
   // check if ingredient clicked
@@ -30,8 +30,8 @@ class Ingredient extends Entity {
           this.isDragged = true;
 
           // track dragging coords
-          this.mouseOffsetX = this.x - mouseX;
-          this.mouseOffsetY = this.y - mouseY;
+          this.mouseOffsetX = this.positionArray[0] - mouseX;
+          this.mouseOffsetY = this.positionArray[1] - mouseY;
       }
   }
 
