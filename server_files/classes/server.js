@@ -49,6 +49,38 @@ class Ingredient extends Entity {
   }
 }
 
+
+let customerOrders = []; //array for storing all customer orders
+let orderIndex = 0; //for indexing orders
+let ingredients = ['Lettuce', 'Cheese', 'Tomato', "Sour Cream"]; // List of possible added ingredients to an order
+
+class Customer //customer class for assigning an order to a customer
+{//class should not extend entity imo -jack h
+  constructor(order)
+  {
+    this.order = order;
+  }
+  getOrder() {
+    return this.order;
+  }
+}
+
+function generateOrder()
+{
+  //background(220); //used for removing old order text
+  
+  shuffle(ingredients, true); // Shuffle the order of ingredients in array to allow for proper randomization
+  
+  let order = [];
+  order[0] = 'Shell'; order[1] = 'Beef'; // Every order must at minimum have a shell and beef
+  
+  for(let i = 0; i < random(0,4); i++) {
+      order[i + 2] = ingredients[i];
+  }
+  customerOrders[orderIndex] = new Customer(order); //adds this order into our order array
+  orderIndex++; //increments to next spot in order array
+}//TODO: swap orderIndex system for customerOrder.push(order)
+
 // define images
 // let tacoShellImg, tacoMeatImg, tomatoImg, cheeseImg, hotSauceImg;
 // let canvasX = 500, canvasY = 500;
