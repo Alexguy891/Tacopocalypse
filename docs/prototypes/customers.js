@@ -1,14 +1,16 @@
-let customerOrders = []; //array for storing all customer orders
-let orderIndex = 0; //for indexing orders
-let orderX = 100; //all orders will be displayed at x = 100
-let initialY = 20; //first order will be displayed at y = 40
+let customerOrders = []; // array for storing all customer orders
+let orderIndex = 0; // for indexing orders
+let orderX = 100; // all orders will be displayed at x = 100
+let initialY = 20; // first order will be displayed at y = 40
 
-class Customer //customer class for assigning an order to a customer
+class Customer extends Entity // customer class for assigning an order to a customer
 {
-  constructor(order)
-  {
+  constructor (posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, order) {
+    super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, false);
+
     this.order = order;
   }
+
   getOrder() {
     return this.order;
   }
@@ -42,8 +44,8 @@ function generateOrder()
   for(let i = 0; i < random(0,4); i++) {
       order[i + 2] = ingredients[i];
   }
-  customerOrders[orderIndex] = new Customer(order); //adds this order into our order array
-  text(customerOrders[orderIndex].getOrder(), orderX, initialY); //displays order onto screen
-  orderIndex++; //increments to next spot in order array
-  initialY += 20; //moves next order's display down 20 units
+  customerOrders[orderIndex] = new Customer(order); // adds this order into our order array
+  text(customerOrders[orderIndex].getOrder(), orderX, initialY); // displays order onto screen
+  orderIndex++; // increments to next spot in order array
+  initialY += 20; // moves next order's display down 20 units
 }
