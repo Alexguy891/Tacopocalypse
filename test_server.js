@@ -72,7 +72,7 @@ function mouseReleased() {
                     // If false, bounce ingredient back to previous position
                     it1.bounce();
                 }
-            });
+            }
         }
 
 
