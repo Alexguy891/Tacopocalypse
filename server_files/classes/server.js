@@ -10,7 +10,7 @@ class Ingredient extends Entity {
 
         // array for ingredient names within TacoShell ingredient objects
         this.ingredientStack = [];
-        if(this.name == "TacoShell") {
+        if(this.name == "Taco Shell") {
             this.ingredientStack.push(this.name);
         }
 
