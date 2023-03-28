@@ -1,6 +1,6 @@
 ObstacleList = [];
 class ObstacleEntity extends Entity {
-    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, scrollSpeed, lifeDamage) {
+    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, moveSpeed, scrollSpeed, lifeDamage) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, true, false);
 
         // speed of scroll across screen

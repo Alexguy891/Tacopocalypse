@@ -2,7 +2,7 @@ var score = 0;
 var lastHit = 0; //stores second, minute for hit detection
 
 class RunnerEntity extends Entity {
-    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, livesAmount) {
+    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, moveSpeed, livesAmount) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, true, true);
 
         // status

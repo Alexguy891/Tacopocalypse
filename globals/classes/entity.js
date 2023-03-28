@@ -1,5 +1,5 @@
 class Entity {
-    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, hasCollision, isMovable) {
+    constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, hasCollision, isMovable, moveSpeed) {
         // position coordinates
         this.positionArray = [posX, posY];
 
@@ -17,5 +17,8 @@ class Entity {
 
         // for movement checking
         this.isMovable = isMovable;
+
+        // setting global movespeed
+        this.moveSpeed = moveSpeed;
     }
 }
