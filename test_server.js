@@ -8,6 +8,7 @@ INGREDIENT_SIZEWIDTH = 100;
 INGREDIENT_SPRITEPATH = "server_files/assets/Ground_Beef.png";
 INGREDIENT_NAME = "ground_beef" 
 INGREDIENT_COOKINGTIME = 5;
+INGREDIENT_COOKABLE = true;
 
 // ingredient-tracking stack
 let interactableStack = [];
@@ -18,7 +19,7 @@ function setup() {
     // create ingredient
     ingredient = new Ingredient(INGREDIENT_POSX, INGREDIENT_POSY, INGREDIENT_COLLISIONHEIGHT, 
         INGREDIENT_COLLISIONWIDTH, INGREDIENT_SIZEHEIGHT, INGREDIENT_SIZEWIDTH,
-        INGREDIENT_SPRITEPATH, INGREDIENT_NAME, INGREDIENT_COOKINGTIME);
+        INGREDIENT_SPRITEPATH, INGREDIENT_NAME, INGREDIENT_COOKINGTIME, INGREDIENT_COOKABLE);
 
     interactableStack.push(ingredient);
 }

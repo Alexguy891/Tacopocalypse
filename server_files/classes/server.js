@@ -1,21 +1,31 @@
 class Ingredient extends Entity {
-    constructor (posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, name, cookingTime) {
+    constructor (posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, name, cookingTime, cookable) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, false, true);
 
         // ingredient name
         this.name = name;
+        this.rootName = name;
 
         // time to cook
         this.cookingTime = cookingTime;
-
-        // array for ingredient names within TacoShell ingredient objects
-        this.ingredientStack = [];
-        if(this.name == "Taco Shell") {
-            this.ingredientStack.push(this.name);
-        }
+        this.cookTimer = 0;
+        this.cookable = cookable;
 
         // for cooked checking
         this.cooked = false;
+        this.burned = false;
+        this.raw = true;
+
+        // update variables conditionally
+        this.checkDone();
+
+        // for cooking checking
+        this.cooking = false;
+
+        // array for ingredient names within TacoShell ingredient objects
+        this.ingredientStack = [];
+        if(this.name == "Taco Shell")
+            this.ingredientStack.push(this.name);
 
         // for dragging
         this.isDragged = false;
@@ -94,6 +104,43 @@ class Ingredient extends Entity {
     bounce() {
         this.positionArray[0] = this.prevPositionArray[0];
         this.positionArray[1] = this.prevPositionArray[1];
+    }
+
+    cook() {
+        // a simple timer should suffice for this, probably don't need to figure out dT
+        if(cooking) { // (Still needs a check for if it *is* cooking, currently always false)
+            cookTimer = cookTimer + 1;
+            this.checkDone;
+        }
+    }
+
+    checkDone() {
+        if(this.cookable) {
+            if(this.cookTimer >= (this.cookingTime * 2) && this.cookingTime != 0) {
+                this.burned = true;
+                this.name = "Burned " + this.rootName;
+                //change sprite to burned version, if not already set
+            }
+            else if(this.cookingTime <= this.cookTimer) { // add  && this.cookingTime != 0??
+                this.cooked = true;
+                this.raw = false;
+                this.name = "Cooked " + this.rootName;
+                //change sprite to cooked version, if not already set
+            }
+            else {
+                this.raw = true;
+                this.name = "Raw " + this.rootName;
+                //change sprite to uncooked version, if not already set
+            }
+        }
+        else {
+            this.raw = false;
+            this.cooked = true;
+        }
+        if(this.raw || this.burned) {
+            return false;
+        }
+        return true;
     }
 }
 
