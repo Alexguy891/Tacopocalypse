@@ -62,15 +62,41 @@ function draw() {
 
 function generateObstacle() {
     // randomly generate type of obstacle
-    // placeholders for now
-    obstacle_collision_height = 20;
-    obstacle_collision_width = 20;
-    obstacle_size_height = 20;
-    obstacle_size_width = 20;
-    obstacle_sprite_path = "runner_files/assets/test_obstacle.jpg";
-    obstacle_speed = 5;
-    obstacle_life_damage = 1;
-
+    obstaclePick = random(0,2);
+    switch(obstaclePick) {
+        case 0:
+            // Rubble
+            obstacle_collision_height = 35;
+            obstacle_collision_width = 35;
+            obstacle_size_height = 35;
+            obstacle_size_width = 35;
+            obstacle_sprite_path = "runner_files/assets/test_obstacle.jpg";
+            obstacle_speed = 5;
+            obstacle_life_damage = 1;
+            break;
+        case 1:
+            // Barbed Wire Fence
+            obstacle_collision_height = 50;
+            obstacle_collision_width = 10;
+            obstacle_size_height = 50;
+            obstacle_size_width = 10;
+            obstacle_sprite_path = "runner_files/assets/test_obstacle.jpg";
+            obstacle_speed = 5;
+            obstacle_life_damage = 1;
+            break;
+        case 2:
+            // Spike Pad
+            obstacle_collision_height = 20;
+            obstacle_collision_width = 60;
+            obstacle_size_height = 20;
+            obstacle_size_width = 60;
+            obstacle_sprite_path = "runner_files/assets/test_obstacle.jpg";
+            obstacle_speed = 5;
+            obstacle_life_damage = 1;
+            break;
+        default:
+            break;
+    }
     // create obstacle object
     obstacle = new ObstacleEntity(OBSTACLE_POS_X, OBSTACLE_POS_Y, obstacle_collision_height, 
         obstacle_collision_width, obstacle_size_height, 
