@@ -1,2 +1,2 @@
 # Tacopocalypse
-A online game about tacos and zombies.
+This game is a combination of Restaurant and Infinite Runner games. This game will involve the user making food for customers inside of a food truck. The user will then have to drive for their character’s life away from zombies. Once the user has reached another checkpoint the user will once again need to make more food. The game will feature several different obstacles to avoid and foods to make. The game will also feature a high score system to help encourage the user to keep playing.
