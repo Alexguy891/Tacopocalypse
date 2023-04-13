@@ -50,13 +50,13 @@ class Ingredient extends Entity {
 }
 
 class TacoOrder {
-    constructor (posX, posY, tacoSprite) {
+    constructor (posX, posY, spritePath) {
         //the x and y position of our taco image
         this.posX = posX;
         this.posY = posY;
 
         //the taco image to be displayed
-        this.tacoSprite = tacoSprite;
+        this.tacoSprite = loadImage(spritePath);
 
         //the order to be checked against when completeing
         //this.actualOrder = actualOrder;

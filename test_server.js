@@ -63,6 +63,8 @@ function setup() {
 function draw() {
     background(220);
 
+    //console.log(typeof(orderImages[0]));
+
     // update if being dragged
     ingredient.update();
 
@@ -70,7 +72,7 @@ function draw() {
     ingredient.show();
 
     if (frameCount % 600 == true) {
-        generateOrder();
+        //generateOrder();
     }
 
     chooseOrder = getRandomInt(15);
@@ -95,9 +97,9 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-function generateOrder() {
+/*function generateOrder() {
     chooseOrder = getRandomInt(15);
     order = new TacoOrder(initialX, initialY, orderImages[chooseOrder]);
     orderList.push(order);
     order.show();
-}
+}*/
