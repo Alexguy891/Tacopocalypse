@@ -49,6 +49,35 @@ class Ingredient extends Entity {
   }
 }
 
+class TacoOrder {
+    constructor (posX, posY, tacoSprite) {
+        //the x and y position of our taco image
+        this.posX = posX;
+        this.posY = posY;
+
+        //the taco image to be displayed
+        this.tacoSprite = tacoSprite;
+
+        //the order to be checked against when completeing
+        //this.actualOrder = actualOrder;
+    }
+
+    getPosX() { //returns x position of order
+        return this.posX;
+    }
+    getPosY() { //returns y position of order
+        return this.posY;
+    }
+
+    show() { //draws the taco
+        image(this.tacoSprite, this.posX, this.posY);
+    }
+
+    /*getActualOrder() { //returns order to be checked
+        return this.actualOrder;
+    }*/
+}
+
 // define images
 // let tacoShellImg, tacoMeatImg, tomatoImg, cheeseImg, hotSauceImg;
 // let canvasX = 500, canvasY = 500;
