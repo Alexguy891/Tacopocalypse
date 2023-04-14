@@ -26,7 +26,7 @@ TACO_14 = "server_files/assets/taco14.png";
 TACO_15 = "server_files/assets/taco15.png";
 TACO_16 = "server_files/assets/taco16.png";
 orderImages = [];
-orderList = [];
+// orderList = [];
 initialX = 75;
 initialY = 20;
 
@@ -57,7 +57,10 @@ function setup() {
     orderImages.push(TACO_15);
     orderImages.push(TACO_16);
 
-    frameRate(60);
+    // generate first order
+    order = generateOrder();
+
+    // frameRate(60);
 }
 
 function draw() {
@@ -71,13 +74,12 @@ function draw() {
     // show ingredient
     ingredient.show();
 
-    if (frameCount % 600 == true) {
-        //generateOrder();
+    // generate order after previous order is complete
+    if(order.isComplete()) {
+        order = generateOrder();
+        //increaseScore();
     }
 
-    chooseOrder = getRandomInt(15);
-    order = new TacoOrder(initialX, initialY, orderImages[chooseOrder]);
-    orderList.push(order);
     order.show();
 }
 
@@ -93,13 +95,14 @@ function mouseReleased() {
     ingredient.release();
 }
 
+// gets random int up to max
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-/*function generateOrder() {
+// generates new order
+function generateOrder() {
     chooseOrder = getRandomInt(15);
     order = new TacoOrder(initialX, initialY, orderImages[chooseOrder]);
-    orderList.push(order);
-    order.show();
-}*/
+    return order;
+}

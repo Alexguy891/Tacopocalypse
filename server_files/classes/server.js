@@ -58,6 +58,9 @@ class TacoOrder {
         //the taco image to be displayed
         this.tacoSprite = loadImage(spritePath);
 
+        // sets order completion
+        this.complete = false;
+
         //the order to be checked against when completeing
         //this.actualOrder = actualOrder;
     }
@@ -65,6 +68,7 @@ class TacoOrder {
     getPosX() { //returns x position of order
         return this.posX;
     }
+
     getPosY() { //returns y position of order
         return this.posY;
     }
@@ -73,6 +77,19 @@ class TacoOrder {
         image(this.tacoSprite, this.posX, this.posY);
     }
 
+    isComplete() { // returns if order is complete
+        // placeholder for now
+        let number = Math.floor(Math.random() * 1);
+
+        if(number == 0) {
+            this.complete = false;
+        } else {
+            this.complete = true;
+        }
+
+        return this.complete;
+    }
+    
     /*getActualOrder() { //returns order to be checked
         return this.actualOrder;
     }*/
