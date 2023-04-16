@@ -26,9 +26,12 @@ TACO_14 = "server_files/assets/taco14.png";
 TACO_15 = "server_files/assets/taco15.png";
 TACO_16 = "server_files/assets/taco16.png";
 orderImages = [];
-// orderList = [];
+orderList = [];
+var orderTest;
 initialX = 75;
 initialY = 20;
+playerScore = 0;
+testing = true;
 
 
 function setup() {
@@ -57,16 +60,29 @@ function setup() {
     orderImages.push(TACO_15);
     orderImages.push(TACO_16);
 
+    orderList.push("Beef");
+    orderList.push("Beef, Lettuce");
+    orderList.push("Beef, Cheese");
+    orderList.push("Beef, Tomato");
+    orderList.push("Beef, Sour Cream");
+    orderList.push("Beef, Lettuce, Cheese");
+    orderList.push("Beef, Cheese, Tomato");
+    orderList.push("Beef, Cheese, Sour Cream");
+    orderList.push("Beef, Lettuce, Tomato");
+    orderList.push("Beef, Lettuce, Sour Cream");
+    orderList.push("Beef, Tomato, Sour Cream");
+    orderList.push("Beef, Lettuce, Tomato, Sour Cream");
+    orderList.push("Beef, Cheese, Tomato, Sour Cream");
+    orderList.push("Beef, Lettuce, Tomato, Cheese");
+    orderList.push("Beef, Lettuce, Cheese, Sour Cream");
+    orderList.push("Beef, Lettuce, Cheese, Tomato, Sour Cream");
+
     // generate first order
     order = generateOrder();
-
-    // frameRate(60);
 }
 
 function draw() {
     background(220);
-
-    //console.log(typeof(orderImages[0]));
 
     // update if being dragged
     ingredient.update();
@@ -75,12 +91,29 @@ function draw() {
     ingredient.show();
 
     // generate order after previous order is complete
-    if(order.isComplete()) {
+    if(order.isComplete(orderTest) && testing == true) {
+        testing = false;
+
         order = generateOrder();
-        //increaseScore();
+        increaseScore(100);
+
+        //makes it so the if statement runs every 5 seconds
+        const myTimeout = setTimeout(setIfLoop, 5000);
     }
 
     order.show();
+}
+
+//for testing
+function setIfLoop() {
+    testing = true;
+}
+
+//increases the player's score
+function increaseScore(scoreIncrease) {
+    playerScore += scoreIncrease;
+    console.log(playerScore);
+    document.getElementById("score").innerHTML = playerScore;
 }
 
 // runs when mouse pressed anywhere
@@ -103,6 +136,7 @@ function getRandomInt(max) {
 // generates new order
 function generateOrder() {
     chooseOrder = getRandomInt(15);
-    order = new TacoOrder(initialX, initialY, orderImages[chooseOrder]);
+    order = new TacoOrder(initialX, initialY, orderImages[chooseOrder], orderList[chooseOrder]);
+    orderTest = orderList[chooseOrder];
     return order;
 }
