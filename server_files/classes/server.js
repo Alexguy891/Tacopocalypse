@@ -50,7 +50,7 @@ class Ingredient extends Entity {
 }
 
 class TacoOrder {
-    constructor (posX, posY, spritePath) {
+    constructor (posX, posY, spritePath, actualOrder) {
         //the x and y position of our taco image
         this.posX = posX;
         this.posY = posY;
@@ -62,7 +62,7 @@ class TacoOrder {
         this.complete = false;
 
         //the order to be checked against when completeing
-        //this.actualOrder = actualOrder;
+        this.actualOrder = actualOrder;
     }
 
     getPosX() { //returns x position of order
@@ -77,22 +77,16 @@ class TacoOrder {
         image(this.tacoSprite, this.posX, this.posY);
     }
 
-    isComplete() { // returns if order is complete
-        // placeholder for now
-        let number = Math.floor(Math.random() * 1);
-
-        if(number == 0) {
-            this.complete = false;
-        } else {
-            this.complete = true;
+    isComplete(order) { // returns if order is complete
+        if(order == this.actualOrder) {
+            return true;
         }
-
-        return this.complete;
+        else { return false; }
     }
     
-    /*getActualOrder() { //returns order to be checked
+    getActualOrder() { //returns order to be checked
         return this.actualOrder;
-    }*/
+    }
 }
 
 // define images
