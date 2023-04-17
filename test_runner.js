@@ -62,7 +62,7 @@ function draw() {
 
 function generateObstacle() {
     // create an (esentially) empty obstacle object
-    obstacle = new ObstacleEntity(0, 0, 0, 0, 0, 0, "", 0, 0);
+    obstacle = new ObstacleEntity(1, 1, 1, 1, 1, 1, 1, 1, 1);
 
     // call function that determines which obstacle the object will be
     // and sets all of the values appropriately

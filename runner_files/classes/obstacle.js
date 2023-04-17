@@ -2,13 +2,14 @@ ObstacleList = [];
 class ObstacleEntity extends Entity {
     constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, scrollSpeed, lifeDamage) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, true, false);
-
+      
+        this.obstaclePick = 0;
         // speed of scroll across screen
         if(scrollSpeed <= 0) {
             scrollSpeed = 1;
             console.log("Invalid scrollSpeed passed to ObstacleEntity.");
         }
-        this.scrollSpeed = scrollSpeed
+        this.scrollSpeed = scrollSpeed;
 
         // lives taken from collision
         if(lifeDamage < 0) {
@@ -35,8 +36,8 @@ class ObstacleEntity extends Entity {
       // randomly generate type of obstacle
       this.posX = OBSTACLE_POS_X;
       this.posY = OBSTACLE_POS_Y;
-      obstaclePick = random(0,2);
-      switch(obstaclePick) {
+      this.obstaclePick = random(0,2);
+      switch(this.obstaclePick) {
           case 0:
               // Rubble
               this.collisionHeight = 35;
