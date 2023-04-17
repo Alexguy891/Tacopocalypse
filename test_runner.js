@@ -61,20 +61,12 @@ function draw() {
 }
 
 function generateObstacle() {
-    // randomly generate type of obstacle
-    // placeholders for now
-    obstacle_collision_height = 20;
-    obstacle_collision_width = 20;
-    obstacle_size_height = 20;
-    obstacle_size_width = 20;
-    obstacle_sprite_path = "runner_files/assets/test_obstacle.jpg";
-    obstacle_speed = 5;
-    obstacle_life_damage = 1;
+    // create an (esentially) empty obstacle object
+    obstacle = new ObstacleEntity(0, 0, 0, 0, 0, 0, "", 0, 0);
 
-    // create obstacle object
-    obstacle = new ObstacleEntity(OBSTACLE_POS_X, OBSTACLE_POS_Y, obstacle_collision_height, 
-        obstacle_collision_width, obstacle_size_height, 
-        obstacle_size_width, obstacle_sprite_path, obstacle_speed, obstacle_life_damage);
+    // call function that determines which obstacle the object will be
+    // and sets all of the values appropriately
+    obstacle.genRandObstacle(OBSTACLE_POS_X, OBSTACLE_POS_X);
 
     // add obstacle to array
     OBSTACLE_ARRAY.push(obstacle);
