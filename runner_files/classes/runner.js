@@ -48,12 +48,26 @@ class RunnerEntity extends Entity {
     // Left side of object is positionArray[0] right side is positionArray[0] plus [1] ?
     isStandable(ObstacleEntity) {
       if (this.positionArray[0] > ObstacleEntity.positionArray[0] &&
-          this.positionArray[0] < ObstacleEntity.positionArray[0] + ObstacleEntity.positionArray[1]) { // checks that runner's x coord is within a platforms x coord
+          this.positionArray[0] < ObstacleEntity.positionArray[0] + ObstacleEntity.positionArray[1]  + this.positionArray[0]) { // comp x coords, this.positionArray[0] for offset
             if (this.positionArray[1] < ObstacleEntity.positionArray[1]) { // checks runner's y coord against platforms y coord
               this.positionArray[1] = ObstacleEntity.positionArray[1] - ObstacleEntity.collisionArray[1];
+              this.platformJump(ObstacleEntity);
             }
       }
     }
+
+    platformJump(ObstacleEntity) {
+        if (keyIsDown(32) && this.positionArray[1] + this.collisionArray[1] >= height - ObstacleEntity.collisionArray[1]) {
+            this.velocity = -25 - this.collisionArray[1] - ObstacleEntity.collisionArray[1];
+            keyCode = DOWN_ARROW;
+        }
+        this.positionArray[1] += this.velocity;
+        if (!this.velocity === 0) {
+          this.velocity += .2; // .2 for more fluid movement /= 1.2 was too rigid
+        }
+
+   }
+
 
     
     show() {
