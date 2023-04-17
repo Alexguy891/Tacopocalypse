@@ -1,14 +1,26 @@
-// ingredient constants
-INGREDIENT_POSX = 100; 
-INGREDIENT_POSY = 100;
-INGREDIENT_COLLISIONHEIGHT = 100; 
-INGREDIENT_COLLISIONWIDTH = 100;
-INGREDIENT_SIZEHEIGHT = 100; 
-INGREDIENT_SIZEWIDTH = 100; 
-INGREDIENT_SPRITEPATH = "server_files/assets/Ground_Beef.png";
-INGREDIENT_NAME = "ground_beef" 
-INGREDIENT_COOKINGTIME = 5;
+// ingredient tub constants
+CHEESE_TUB_COORDINATES = [9, 250, 100, 295];
+TOMATO_TUB_COORDINATES = [125, 250, 216, 295];
+BEEF_TUB_COORDINATES = [241, 250, 332, 295];
+LETTUCE_TUB_COORDINATES = [9, 320, 100, 371];
+SOURCREAM_TUB_COORDINATES = [125, 320, 216, 371];
 
+// ingredient spawn constants
+CHEESE_SPAWN_COORDINATES = [(CHEESE_TUB_COORDINATES[0] + CHEESE_TUB_COORDINATES[2]) / 2, 
+                            (CHEESE_TUB_COORDINATES[1] + CHEESE_TUB_COORDINATES[3]) / 2];
+TOMATO_SPAWN_COORDINATES = [(TOMATO_TUB_COORDINATES[0] + TOMATO_TUB_COORDINATES[2]) / 2,
+                            (TOMATO_TUB_COORDINATES[1] + TOMATO_TUB_COORDINATES[3]) / 2];
+BEEF_SPAWN_COORDINATES = [(BEEF_TUB_COORDINATES[0] + BEEF_TUB_COORDINATES[2]) / 2,
+                            (BEEF_TUB_COORDINATES[1] + BEEF_TUB_COORDINATES[3]) / 2];
+LETTUCE_SPAWN_COORDINATES = [(LETTUCE_TUB_COORDINATES[0] + LETTUCE_TUB_COORDINATES[2]) / 2,
+                            (LETTUCE_TUB_COORDINATES[1] + LETTUCE_TUB_COORDINATES[3]) / 2];
+SOURCREAM_SPAWN_COORDINATES = [(SOURCREAM_TUB_COORDINATES[0] + SOURCREAM_TUB_COORDINATES[2]) / 2,
+                            (SOURCREAM_TUB_COORDINATES[1] + SOURCREAM_TUB_COORDINATES[3]) / 2];
+
+// trash can constants
+TRASH_COORDINATES = [560, 334, 700, 384]
+
+// taco image assets
 TACO_1 = "server_files/assets/taco01.png";
 TACO_2 = "server_files/assets/taco02.png";
 TACO_3 = "server_files/assets/taco03.png";
@@ -25,23 +37,28 @@ TACO_13 = "server_files/assets/taco13.png";
 TACO_14 = "server_files/assets/taco14.png";
 TACO_15 = "server_files/assets/taco15.png";
 TACO_16 = "server_files/assets/taco16.png";
-orderImages = [];
-orderList = [];
-var orderTest;
-initialX = 75;
-initialY = 20;
-playerScore = 0;
-testing = true;
 
+// order position constants
+INITIAL_X = 75;
+INITIAL_Y = 20;
+
+// array of taco images
+orderImages = [];
+
+// arrays for order generation and current stack
+orderList = [];
+currentIngredientStack = [];
+
+// player score
+playerScore = 0;
+
+// for order testing
+var orderTest;
+testing = true;
 
 function setup() {
     createCanvas(720, 400);
     background(220);
-    
-    // create ingredient
-    ingredient = new Ingredient(INGREDIENT_POSX, INGREDIENT_POSY, INGREDIENT_COLLISIONHEIGHT, 
-        INGREDIENT_COLLISIONWIDTH, INGREDIENT_SIZEHEIGHT, INGREDIENT_SIZEWIDTH,
-        INGREDIENT_SPRITEPATH, INGREDIENT_NAME, INGREDIENT_COOKINGTIME);
 
     orderImages.push(TACO_1);
     orderImages.push(TACO_2);
@@ -64,31 +81,49 @@ function setup() {
     orderList.push("Beef, Lettuce");
     orderList.push("Beef, Cheese");
     orderList.push("Beef, Tomato");
-    orderList.push("Beef, Sour Cream");
+    orderList.push("Beef, Sour_Cream");
     orderList.push("Beef, Lettuce, Cheese");
     orderList.push("Beef, Cheese, Tomato");
-    orderList.push("Beef, Cheese, Sour Cream");
+    orderList.push("Beef, Cheese, Sour_Cream");
     orderList.push("Beef, Lettuce, Tomato");
-    orderList.push("Beef, Lettuce, Sour Cream");
-    orderList.push("Beef, Tomato, Sour Cream");
-    orderList.push("Beef, Lettuce, Tomato, Sour Cream");
-    orderList.push("Beef, Cheese, Tomato, Sour Cream");
+    orderList.push("Beef, Lettuce, Sour_Cream");
+    orderList.push("Beef, Tomato, Sour_Cream");
+    orderList.push("Beef, Lettuce, Tomato, Sour_Cream");
+    orderList.push("Beef, Cheese, Tomato, Sour_Cream");
     orderList.push("Beef, Lettuce, Tomato, Cheese");
-    orderList.push("Beef, Lettuce, Cheese, Sour Cream");
-    orderList.push("Beef, Lettuce, Cheese, Tomato, Sour Cream");
+    orderList.push("Beef, Lettuce, Cheese, Sour_Cream");
+    orderList.push("Beef, Lettuce, Cheese, Tomato, Sour_Cream");
 
     // generate first order
     order = generateOrder();
+
+    // load window art image
+    windowArt = loadImage("server_files/assets/Window_Art.png");
+
+    // ingredient declaration
+    ingredient = new Ingredient(0, 0, "server_files/assets/Ground_Beef.png", "beef");
+
+    // for showing/hiding on ingredient spawn
+    showIngredient = false;
 }
 
 function draw() {
     background(220);
 
+    // show window art image
+    image(windowArt, 0, 0, 720, 400);
+
+    // for testing
+    text("(" + mouseX + ", " + mouseY + ")", mouseX, mouseY);
+    stroke(0);
+
+    // show ingredient if spawned
+    if(showIngredient) {
+        ingredient.show();
+    }
+
     // update if being dragged
     ingredient.update();
-
-    // show ingredient
-    ingredient.show();
 
     // generate order after previous order is complete
     if(order.isComplete(orderTest) && testing == true) {
@@ -119,10 +154,39 @@ function increaseScore(scoreIncrease) {
 function mousePressed() {
     // checks for mouse click
     ingredient.clicked();
+
+    // checks mouse for ingredient tub click if no ingredient spawned
+    if(!ingredient.isDragged) {
+        checkTubCoordinates();
+    }
+}
+
+function checkTubCoordinates() {
+    if (mouseX > CHEESE_TUB_COORDINATES[0] && mouseY > CHEESE_TUB_COORDINATES[1] && mouseX < CHEESE_TUB_COORDINATES[2] && mouseY < CHEESE_TUB_COORDINATES[3]) {
+        ingredient = new Cheese(CHEESE_SPAWN_COORDINATES[0], CHEESE_SPAWN_COORDINATES[1]);
+        showIngredient = true;
+    } else if (mouseX > TOMATO_TUB_COORDINATES[0] && mouseY > TOMATO_TUB_COORDINATES[1] && mouseX < TOMATO_TUB_COORDINATES[2] && mouseY < TOMATO_TUB_COORDINATES[3]) {
+        ingredient = new Tomato(TOMATO_SPAWN_COORDINATES[0], TOMATO_SPAWN_COORDINATES[1]);
+        showIngredient = true;
+    } else if (mouseX > BEEF_TUB_COORDINATES[0] && mouseY > BEEF_TUB_COORDINATES[1] && mouseX < BEEF_TUB_COORDINATES[2] && mouseY < BEEF_TUB_COORDINATES[3]) {
+        ingredient = new Beef(BEEF_SPAWN_COORDINATES[0], BEEF_SPAWN_COORDINATES[1]);
+        showIngredient = true;
+    } else if (mouseX > LETTUCE_TUB_COORDINATES[0] && mouseY > LETTUCE_TUB_COORDINATES[1] && mouseX < LETTUCE_TUB_COORDINATES[2] && mouseY < LETTUCE_TUB_COORDINATES[3]) {
+        ingredient = new Lettuce(LETTUCE_SPAWN_COORDINATES[0], LETTUCE_SPAWN_COORDINATES[1]);
+        showIngredient = true;
+    } else if (mouseX > SOURCREAM_TUB_COORDINATES[0] && mouseY > SOURCREAM_TUB_COORDINATES[1] && mouseX < SOURCREAM_TUB_COORDINATES[2] && mouseY < SOURCREAM_TUB_COORDINATES[3]) {
+        ingredient = new SourCream(SOURCREAM_SPAWN_COORDINATES[0], SOURCREAM_SPAWN_COORDINATES[1]);
+        showIngredient = true;
+    }
 }
 
 // runs when mouse released anywhere
 function mouseReleased() {
+    // checks if ingredient is dropped on trash
+    if (mouseX > TRASH_COORDINATES[0] && mouseY > TRASH_COORDINATES[1] && mouseX < TRASH_COORDINATES[2] && mouseY < TRASH_COORDINATES[3] && ingredient.isDragged) {
+        showIngredient = false;
+    }
+
     // checks for mouse release
     ingredient.release();
 }
@@ -135,7 +199,7 @@ function getRandomInt(max) {
 // generates new order
 function generateOrder() {
     chooseOrder = getRandomInt(15);
-    order = new TacoOrder(initialX, initialY, orderImages[chooseOrder], orderList[chooseOrder]);
+    order = new TacoOrder(INITIAL_X, INITIAL_Y, orderImages[chooseOrder], orderList[chooseOrder]);
     orderTest = orderList[chooseOrder];
     return order;
 }

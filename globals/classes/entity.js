@@ -17,5 +17,8 @@ class Entity {
 
         // for movement checking
         this.isMovable = isMovable;
+
+        // for center
+        this.centerArray = [this.positionArray[0] - this.collisionArray[1] / 2, this.positionArray[1] - this.collisionArray[0] / 2];
     }
 }

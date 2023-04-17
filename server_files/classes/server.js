@@ -1,12 +1,12 @@
 class Ingredient extends Entity {
-  constructor (posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, name, cookingTime) {
-      super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, false, true);
+  constructor (posX, posY, spritePath, name) {
+      super(posX, posY, 100, 100, 100, 100, spritePath, false, true);
 
       // ingredient name
       this.name = name;
 
       // time to cook
-      this.cookingTime = cookingTime;
+      // this.cookingTime = cookingTime;
 
       // for cooked checking
       this.cooked = false;
@@ -47,6 +47,46 @@ class Ingredient extends Entity {
           this.positionArray[1] = mouseY + this.mouseOffsetY;
       }
   }
+}
+
+class Cheese extends Ingredient {
+    constructor(posX, posY) { 
+        super(posX, posY, "server_files/assets/Shredded_Cheese_Ver_3.png", "cheese");
+        this.positionArray[0] = this.centerArray[0];
+        this.positionArray[1] = this.centerArray[1];
+    }
+}
+
+class Tomato extends Ingredient {
+    constructor(posX, posY) { 
+        super(posX, posY, "server_files/assets/Diced_Tomatoes.png", "tomatoes");
+        this.positionArray[0] = this.centerArray[0];
+        this.positionArray[1] = this.centerArray[1];
+    }
+}
+
+class Beef extends Ingredient {
+    constructor(posX, posY) { 
+        super(posX, posY, "server_files/assets/Ground_Beef.png", "beef");
+        this.positionArray[0] = this.centerArray[0];
+        this.positionArray[1] = this.centerArray[1];
+    }
+}
+
+class Lettuce extends Ingredient {
+    constructor(posX, posY) { 
+        super(posX, posY, "server_files/assets/Lettuce.png", "lettuce");
+        this.positionArray[0] = this.centerArray[0];
+        this.positionArray[1] = this.centerArray[1];
+    }
+}
+
+class SourCream extends Ingredient {
+    constructor(posX, posY) { 
+        super(posX, posY, "server_files/assets/Sour_Cream.png", "sour_cream");
+        this.positionArray[0] = this.centerArray[0];
+        this.positionArray[1] = this.centerArray[1];
+    }
 }
 
 class TacoOrder {
