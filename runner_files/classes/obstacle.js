@@ -3,8 +3,6 @@ class ObstacleEntity extends Entity {
     constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, scrollSpeed, lifeDamage) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, true, false);
       
-        this.spritePath = "runner_files/assets/test_obstacle.jpg";
-        this.obstaclePick = 0;
         // speed of scroll across screen
         if(scrollSpeed <= 0) {
             scrollSpeed = 1;
@@ -32,45 +30,10 @@ class ObstacleEntity extends Entity {
             this.positionArray[0] -= this.scrollSpeed;
         }//NOTE: THIS IF IS NOT NEEDED. there is no way to delete an object in js, i think, so this is just a pointless check in here for legacy reasons.
     }
-
+/*
     genRandObstacle(OBSTACLE_POS_X, OBSTACLE_POS_Y) {
-      // randomly generate type of obstacle
-      this.posX = OBSTACLE_POS_X;
-      this.posY = OBSTACLE_POS_Y;
-      this.obstaclePick = random(0,2);
-      switch(this.obstaclePick) {
-          case 0:
-              // Rubble
-              this.collisionHeight = 35;
-              this.collisionWidth = 35;
-              this.sizeHeight = 35;
-              this.sizeWidth = 35;
-              this.spritePath = "runner_files/assets/test_obstacle.jpg";
-              this.scrollSpeed = 5;
-              this.lifeDamage = 1;
-              break;
-          case 1:
-              // Wall
-              this.collisionHeight = 50;
-              this.collisionWidth = 10;
-              this.sizeHeight = 50;
-              this.sizeWidth = 10;
-              this.spritePath = "runner_files/assets/test_obstacle.jpg";
-              this.scrollSpeed = 5;
-              this.lifeDamage = 1;
-              break;
-          case 2:
-              // Spike Pad
-              this.collisionHeight = 20;
-              this.collisionWidth = 60;
-              this.sizeHeight = 20;
-              this.sizeWidth = 60;
-              this.spritePath = "runner_files/assets/test_obstacle.jpg";
-              this.scrollSpeed = 5;
-              this.lifeDamage = 1;
-              break;
-          default:
-              break;
-      }
+      // load sprite image
+      this.spriteImage = loadImage(spritePath);
     }
+    */
 }
