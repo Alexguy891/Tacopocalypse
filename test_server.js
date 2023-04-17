@@ -39,7 +39,7 @@ TACO_15 = "server_files/assets/taco15.png";
 TACO_16 = "server_files/assets/taco16.png";
 
 // order position constants
-INITIAL_X = 75;
+INITIAL_X = 200;
 INITIAL_Y = 20;
 
 // array of taco images
