@@ -3,6 +3,7 @@ class ObstacleEntity extends Entity {
     constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, scrollSpeed, lifeDamage) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, true, false);
       
+        this.spritePath = "runner_files/assets/test_obstacle.jpg";
         this.obstaclePick = 0;
         // speed of scroll across screen
         if(scrollSpeed <= 0) {

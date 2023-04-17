@@ -62,11 +62,12 @@ function draw() {
 
 function generateObstacle() {
     // create an (esentially) empty obstacle object
-    obstacle = new ObstacleEntity(1, 1, 1, 1, 1, 1, 1, 1, 1);
+    obstacle = new ObstacleEntity(1, 1, 1, 1, 1, 1,
+        "runner_files/assets/test_obstacle.jpg", 1, 1);
 
     // call function that determines which obstacle the object will be
     // and sets all of the values appropriately
-    obstacle.genRandObstacle(OBSTACLE_POS_X, OBSTACLE_POS_X);
+    obstacle.genRandObstacle(OBSTACLE_POS_X, OBSTACLE_POS_Y);
 
     // add obstacle to array
     OBSTACLE_ARRAY.push(obstacle);
