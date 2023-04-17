@@ -113,7 +113,6 @@ function setIfLoop() {
 function increaseScore(scoreIncrease) {
     playerScore += scoreIncrease;
     console.log(playerScore);
-    document.getElementById("score").innerHTML = playerScore;
 }
 
 // runs when mouse pressed anywhere
