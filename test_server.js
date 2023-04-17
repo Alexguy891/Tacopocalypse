@@ -1,9 +1,9 @@
 // ingredient tub constants
-CHEESE_TUB_COORDINATES = [9, 250, 100, 295];
-TOMATO_TUB_COORDINATES = [125, 250, 216, 295];
-BEEF_TUB_COORDINATES = [241, 250, 332, 295];
-LETTUCE_TUB_COORDINATES = [9, 320, 100, 371];
-SOURCREAM_TUB_COORDINATES = [125, 320, 216, 371];
+CHEESE_TUB_COORDINATES = [15, 261, 106, 301];
+TOMATO_TUB_COORDINATES = [127, 261, 218, 301];
+BEEF_TUB_COORDINATES = [240, 261, 331, 301];
+LETTUCE_TUB_COORDINATES = [70, 330, 161, 370];
+SOURCREAM_TUB_COORDINATES = [125, 330, 216, 370];
 
 // ingredient spawn constants
 CHEESE_SPAWN_COORDINATES = [(CHEESE_TUB_COORDINATES[0] + CHEESE_TUB_COORDINATES[2]) / 2, 
@@ -18,7 +18,7 @@ SOURCREAM_SPAWN_COORDINATES = [(SOURCREAM_TUB_COORDINATES[0] + SOURCREAM_TUB_COO
                             (SOURCREAM_TUB_COORDINATES[1] + SOURCREAM_TUB_COORDINATES[3]) / 2];
 
 // trash can constants
-TRASH_COORDINATES = [560, 334, 700, 384]
+TRASH_COORDINATES = [553, 282, 708, 333]
 
 // taco image assets
 TACO_1 = "server_files/assets/taco01.png";
@@ -98,7 +98,7 @@ function setup() {
     order = generateOrder();
 
     // load window art image
-    windowArt = loadImage("server_files/assets/Window_Art.png");
+    windowArt = loadImage("server_files/assets/Window_Art_v2.png");
 
     // ingredient declaration
     ingredient = new Ingredient(0, 0, "server_files/assets/Ground_Beef.png", "beef");
