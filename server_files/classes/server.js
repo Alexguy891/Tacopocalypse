@@ -9,7 +9,10 @@ class Ingredient extends Entity {
       // this.cookingTime = cookingTime;
 
       // for cooked checking
-      this.cooked = false;
+      // this.cooked = false;
+
+        // for checking
+        this.spritePath = spritePath;
 
       // for dragging
       this.isDragged = false;
@@ -59,7 +62,7 @@ class Cheese extends Ingredient {
 
 class Tomato extends Ingredient {
     constructor(posX, posY) { 
-        super(posX, posY, "server_files/assets/Diced_Tomatoes.png", "tomatoes");
+        super(posX, posY, "server_files/assets/Diced_Tomatoes.png", "tomato");
         this.positionArray[0] = this.centerArray[0];
         this.positionArray[1] = this.centerArray[1];
     }
@@ -114,14 +117,11 @@ class TacoOrder {
     }
 
     show() { //draws the taco
-        image(this.tacoSprite, this.posX, this.posY);
+        image(this.tacoSprite, this.posX - 38, this.posY - 5, 100, 100);
     }
 
     isComplete(order) { // returns if order is complete
-        if(order == this.actualOrder) {
-            return true;
-        }
-        else { return false; }
+        return sortArrayEquals(order, this.actualOrder);
     }
     
     getActualOrder() { //returns order to be checked
