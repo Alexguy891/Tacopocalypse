@@ -47,27 +47,17 @@ TACO_17 = "server_files/assets/taco17.png";
 TACO_18 = "server_files/assets/taco18.png";
 TACO_19 = "server_files/assets/taco19.png";
 TACO_20 = "server_files/assets/taco20.png";
-// placeholders
-TACO_21 = "server_files/assets/Taco_Shell.png";
-TACO_22 = "server_files/assets/Taco_Shell.png";
-TACO_23 = "server_files/assets/Taco_Shell.png";
-TACO_24 = "server_files/assets/Taco_Shell.png";
-TACO_25 = "server_files/assets/Taco_Shell.png";
-TACO_26 = "server_files/assets/Taco_Shell.png";
-TACO_27 = "server_files/assets/Taco_Shell.png";
-TACO_28 = "server_files/assets/Taco_Shell.png";
-TACO_29 = "server_files/assets/Taco_Shell.png";
-TACO_30 = "server_files/assets/Taco_Shell.png";
-// TACO_21 = "server_files/assets/taco21.png";
-// TACO_22 = "server_files/assets/taco22.png";
-// TACO_23 = "server_files/assets/taco23.png";
-// TACO_24 = "server_files/assets/taco24.png";
-// TACO_25 = "server_files/assets/taco25.png";
-// TACO_26 = "server_files/assets/taco26.png";
-// TACO_27 = "server_files/assets/taco27.png";
-// TACO_28 = "server_files/assets/taco28.png";
-// TACO_29 = "server_files/assets/taco29.png";
-// TACO_30 = "server_files/assets/taco30.png";
+TACO_21 = "server_files/assets/taco21.png";
+TACO_22 = "server_files/assets/taco22.png";
+TACO_23 = "server_files/assets/taco23.png";
+TACO_24 = "server_files/assets/taco24.png";
+TACO_25 = "server_files/assets/taco25.png";
+TACO_26 = "server_files/assets/taco26.png";
+TACO_27 = "server_files/assets/taco27.png";
+TACO_28 = "server_files/assets/taco28.png";
+TACO_29 = "server_files/assets/taco29.png";
+TACO_30 = "server_files/assets/taco30.png";
+TACO_30 = "server_files/assets/taco31.png";
 
 // order position constants
 INITIAL_X = 350;
@@ -117,6 +107,7 @@ function setup() {
     orderImages.push(TACO_28);
     orderImages.push(TACO_29);
     orderImages.push(TACO_30);
+    orderImages.push(TACO_31);
 
     orderList.push(["beef"]);
     orderList.push(["beef", "lettuce"]);
@@ -148,6 +139,7 @@ function setup() {
     orderList.push(["sour_cream", "tomato" ]);
     orderList.push(["lettuce", "sour_cream", "tomato"]);
     orderList.push(["lettuce", "sour_cream"]);
+    orderList.push(["cheese", "lettuce", "sour_cream"]);
 
     // generate first order
     order = generateOrder();
