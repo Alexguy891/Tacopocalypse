@@ -149,12 +149,15 @@ function draw() {
     // generate order after previous order is complete
     if(order.isComplete(currentIngredientStack)) {
         order = generateOrder();
+        ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
+        ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
+        ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
         currentIngredientStack = [];
         increaseScore(100);
     }
 
     order.show();
-
+    
     ingredientStack.show();
 }
 
@@ -210,6 +213,9 @@ function mouseReleased() {
         }
 
         if (ingredientStack.isDragged) {
+            ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
+            ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
+            ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
             currentIngredientStack = [];
         }
     }
