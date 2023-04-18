@@ -1,4 +1,5 @@
 ObstacleList = [];
+showHitboxes = true;
 class ObstacleEntity extends Entity {
     constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, scrollSpeed, lifeDamage) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, true, false);
@@ -22,10 +23,14 @@ class ObstacleEntity extends Entity {
     show() {
         // show image
       
-        image(this.spriteImage, this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
+      image(this.spriteImage, this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
       //this.positionArray[0] -= this.scrollSpeed;
-        // speed
-        
+      // speed
+      if(showHitboxes) {
+        noFill();
+        rect(this.positionArray[0], this.positionArray[1], this.collisionArray[0], this.collisionArray[1]);
+      }
+
       if (this.positionArray[0] + this.sizeArray[0] >= 0) {
             this.positionArray[0] -= this.scrollSpeed;
         }//NOTE: THIS IF IS NOT NEEDED. there is no way to delete an object in js, i think, so this is just a pointless check in here for legacy reasons.

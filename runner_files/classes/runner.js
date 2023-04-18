@@ -1,5 +1,6 @@
 var score = 0;
 var lastHit = 0; //stores second, minute for hit detection
+showHitboxes = true;
 
 class RunnerEntity extends Entity {
     constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, livesAmount) {
@@ -62,19 +63,22 @@ class RunnerEntity extends Entity {
             keyCode = DOWN_ARROW;
         }
         this.positionArray[1] += this.velocity;
-        if (!this.velocity === 0) {
+        if (!this.velocity == 0) {
           this.velocity += .2; // .2 for more fluid movement /= 1.2 was too rigid
         }
 
    }
 
-
-    
     show() {
       // show image
       image(this.spriteImage, this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
       // fill(51);
       // rect(this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
+      
+      if(showHitboxes) {
+        noFill();
+        rect(this.positionArray[0], this.positionArray[1], this.collisionArray[0], this.collisionArray[1]);
+      }
 
       //basic hud
       text('lives: '+ this.livesAmount, 10, 30);
@@ -85,6 +89,7 @@ class RunnerEntity extends Entity {
       if(this.positionArray[1] + this.collisionArray[1] < height) {
         this.positionArray[1] += this.gravity;
       }  
+      
       this.positionArray[1] += this.velocity;//?? i have no clue what this does.
       this.velocity /= 1.2;
       
