@@ -18,7 +18,13 @@ SOURCREAM_SPAWN_COORDINATES = [(SOURCREAM_TUB_COORDINATES[0] + SOURCREAM_TUB_COO
                             (SOURCREAM_TUB_COORDINATES[1] + SOURCREAM_TUB_COORDINATES[3]) / 2];
 
 // trash can constants
-TRASH_COORDINATES = [553, 282, 708, 333]
+TRASH_COORDINATES = [553, 282, 708, 333];
+
+// plate coordinates
+PLATE_COORDINATES = [356, 241, 539, 377];
+
+// ingredient stack coordinates
+INGREDIENT_STACK_COORDINATES = [(PLATE_COORDINATES[0] + PLATE_COORDINATES[2]) / 2, (PLATE_COORDINATES[1] + PLATE_COORDINATES[3]) / 2];
 
 // taco image assets
 TACO_1 = "server_files/assets/taco01.png";
@@ -37,6 +43,11 @@ TACO_13 = "server_files/assets/taco13.png";
 TACO_14 = "server_files/assets/taco14.png";
 TACO_15 = "server_files/assets/taco15.png";
 TACO_16 = "server_files/assets/taco16.png";
+// placeholder images for missing taco combos
+TACO_17 = "server_files/assets/Taco_Shell.png";
+TACO_18 = "server_files/assets/Taco_Shell.png";
+TACO_19 = "server_files/assets/Taco_Shell.png";
+TACO_20 = "server_files/assets/Taco_Shell.png";
 
 // order position constants
 INITIAL_X = 350;
@@ -51,10 +62,6 @@ currentIngredientStack = [];
 
 // player score
 playerScore = 0;
-
-// for order testing
-var orderTest;
-testing = true;
 
 function setup() {
     createCanvas(720, 400);
@@ -76,26 +83,39 @@ function setup() {
     orderImages.push(TACO_14);
     orderImages.push(TACO_15);
     orderImages.push(TACO_16);
+    orderImages.push(TACO_17);
+    orderImages.push(TACO_18);
+    orderImages.push(TACO_19);
+    orderImages.push(TACO_20);
 
-    orderList.push("Beef");
-    orderList.push("Beef, Lettuce");
-    orderList.push("Beef, Cheese");
-    orderList.push("Beef, Tomato");
-    orderList.push("Beef, Sour_Cream");
-    orderList.push("Beef, Lettuce, Cheese");
-    orderList.push("Beef, Cheese, Tomato");
-    orderList.push("Beef, Cheese, Sour_Cream");
-    orderList.push("Beef, Lettuce, Tomato");
-    orderList.push("Beef, Lettuce, Sour_Cream");
-    orderList.push("Beef, Tomato, Sour_Cream");
-    orderList.push("Beef, Lettuce, Tomato, Sour_Cream");
-    orderList.push("Beef, Cheese, Tomato, Sour_Cream");
-    orderList.push("Beef, Lettuce, Tomato, Cheese");
-    orderList.push("Beef, Lettuce, Cheese, Sour_Cream");
-    orderList.push("Beef, Lettuce, Cheese, Tomato, Sour_Cream");
+    orderList.push(["beef"]);
+    orderList.push(["beef", "lettuce"]);
+    orderList.push(["beef", "cheese"]);
+    orderList.push(["beef", "tomato"]);
+    orderList.push(["beef", "sour_cream"]);
+    orderList.push(["beef", "cheese", "lettuce"]);
+    orderList.push(["beef", "cheese", "tomato"]);
+    orderList.push(["beef", "cheese", "sour_cream"]);
+    orderList.push(["beef", "lettuce", "tomato"]);
+    orderList.push(["beef", "lettuce", "sour_cream"]);
+    orderList.push(["beef", "sour_cream", "tomato"]);
+    orderList.push(["beef", "lettuce", "sour_cream", "tomato"]);
+    orderList.push(["beef", "cheese", "sour_cream", "tomato"]);
+    orderList.push(["beef", "cheese", "lettuce", "tomato"]);
+    orderList.push(["beef", "cheese", "lettuce", "sour_cream"]);
+    orderList.push(["beef", "cheese", "lettuce", "sour_cream", "tomato"]);
+    orderList.push(["tomato"]);
+    orderList.push(["lettuce"]);
+    orderList.push(["cheese"]);
+    orderList.push(["sour_cream"]);
 
     // generate first order
     order = generateOrder();
+
+    // create initial ingredient stack
+    ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
+    ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
+    ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
 
     // load window art image
     windowArt = loadImage("server_files/assets/Window_Art_v2.png");
@@ -124,19 +144,18 @@ function draw() {
 
     // update if being dragged
     ingredient.update();
+    ingredientStack.update();
 
     // generate order after previous order is complete
-    if(order.isComplete(orderTest) && testing == true) {
-        testing = false;
-
+    if(order.isComplete(currentIngredientStack)) {
         order = generateOrder();
+        currentIngredientStack = [];
         increaseScore(100);
-
-        //makes it so the if statement runs every 5 seconds
-        const myTimeout = setTimeout(setIfLoop, 5000);
     }
 
     order.show();
+
+    ingredientStack.show();
 }
 
 //for testing
@@ -154,10 +173,12 @@ function increaseScore(scoreIncrease) {
 function mousePressed() {
     // checks for mouse click
     ingredient.clicked();
+    ingredientStack.clicked();
 
     // checks mouse for ingredient tub click if no ingredient spawned
     if(!ingredient.isDragged) {
         checkTubCoordinates();
+        ingredient.clicked();
     }
 }
 
@@ -182,13 +203,35 @@ function checkTubCoordinates() {
 
 // runs when mouse released anywhere
 function mouseReleased() {
-    // checks if ingredient is dropped on trash
-    if (mouseX > TRASH_COORDINATES[0] && mouseY > TRASH_COORDINATES[1] && mouseX < TRASH_COORDINATES[2] && mouseY < TRASH_COORDINATES[3] && ingredient.isDragged) {
-        showIngredient = false;
+    // checks if ingredient or ingredient stack is dropped on trash
+    if (mouseX > TRASH_COORDINATES[0] && mouseY > TRASH_COORDINATES[1] && mouseX < TRASH_COORDINATES[2] && mouseY < TRASH_COORDINATES[3]) {
+        if(ingredient.isDragged) {
+            showIngredient = false;
+        }
+
+        if (ingredientStack.isDragged) {
+            currentIngredientStack = [];
+        }
     }
 
-    // checks for mouse release
-    ingredient.release();
+    // checks if ingredient dropped on plate
+    if(mouseX > PLATE_COORDINATES[0] && mouseY > PLATE_COORDINATES[1] && mouseX < PLATE_COORDINATES[2] && mouseY < PLATE_COORDINATES[3] && ingredient.isDragged) {
+        if(!currentIngredientStack.includes(ingredient.name)) {
+            currentIngredientStack.push(ingredient.name);
+        }
+        showIngredient = false;
+
+        ingredientStack = showIngredientStack();
+    } else if (ingredientStack.isDragged && !(mouseX > TRASH_COORDINATES[0] && mouseY > TRASH_COORDINATES[1] && mouseX < TRASH_COORDINATES[2] && mouseY < TRASH_COORDINATES[3])) {
+        ingredientStack.positionArray[0] = INGREDIENT_STACK_COORDINATES[0];
+        ingredientStack.positionArray[1] = INGREDIENT_STACK_COORDINATES[1];
+        ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
+        ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
+    }
+
+     // checks for mouse release
+     ingredient.release();
+     ingredientStack.release();
 }
 
 // gets random int up to max
@@ -200,6 +243,43 @@ function getRandomInt(max) {
 function generateOrder() {
     chooseOrder = getRandomInt(15);
     order = new TacoOrder(INITIAL_X, INITIAL_Y, orderImages[chooseOrder], orderList[chooseOrder]);
-    orderTest = orderList[chooseOrder];
+    // orderTest = orderList[chooseOrder];
     return order;
+}
+
+// checks if two arrays are equal
+function sortArrayEquals(array1, array2) {
+    // sort both arrays
+    array1.sort();
+    array2.sort();
+
+    // check for same lengths
+    if(array1.length != array2.length) {
+        return false;
+    }
+
+    // check individual items
+    for(var i = 0; i < array1.length; i++) {
+        console.log(array1[i] + " ?= " + array2[i]);
+        if(array1[i] != array2[i]) {
+            console.log("Arrays not equal");
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+// shows the current ingredient stack
+function showIngredientStack() { 
+    for(var i = 0; i < orderList.length; i++) {
+        if(sortArrayEquals(currentIngredientStack, orderList[i])) {
+            console.log("Found same order");
+            ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], orderImages[i], "stack");
+            ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
+            ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
+            console.log("Ingredient stack: " + ingredientStack.spritePath);
+            return ingredientStack;
+        }
+    }
 }
