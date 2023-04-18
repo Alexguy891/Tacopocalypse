@@ -57,7 +57,7 @@ TACO_27 = "server_files/assets/taco27.png";
 TACO_28 = "server_files/assets/taco28.png";
 TACO_29 = "server_files/assets/taco29.png";
 TACO_30 = "server_files/assets/taco30.png";
-TACO_30 = "server_files/assets/taco31.png";
+TACO_31 = "server_files/assets/taco31.png";
 
 // order position constants
 INITIAL_X = 350;
