@@ -61,12 +61,57 @@ function draw() {
 }
 
 function generateObstacle() {
-    // create an (esentially) empty obstacle object
-    obstacle = new ObstacleEntity(0, 0, 0, 0, 0, 0, "", 0, 0);
+    // Set Base Values (just in case)
+    obstacle_collision_height = 35;
+    obstacle_collision_width = 35;
+    obstacle_size_height = 35;
+    obstacle_size_width = 35;
+    obstacle_sprite_path = "runner_files/assets/test_obstacle.jpg";
+    obstacle_scroll_speed = 5;
+    obstacle_life_damage = 1;
 
-    // call function that determines which obstacle the object will be
-    // and sets all of the values appropriately
-    obstacle.genRandObstacle(OBSTACLE_POS_X, OBSTACLE_POS_X);
+    // randomly generate type of obstacle
+    obstaclePick = random(0,2);
+    switch(obstaclePick) {
+        case 0:
+            // Rubble
+            obstacle_collision_height = 35;
+            obstacle_collision_width = 35;
+            obstacle_size_height = 35;
+            obstacle_size_width = 35;
+            obstacle_sprite_path = "runner_files/assets/test_obstacle.jpg";
+            obstacle_scroll_speed = 5;
+            obstacle_life_damage = 1;
+            break;
+        case 1:
+            // Wall
+            obstacle_collision_height = 50;
+            obstacle_collision_width = 10;
+            obstacle_size_height = 50;
+            obstacle_size_width = 10;
+            obstacle_sprite_path = "runner_files/assets/test_obstacle.jpg";
+            obstacle_scroll_speed = 5;
+            obstacle_life_damage = 1;
+            break;
+        case 2:
+            // Spike Pad
+            obstacle_collision_height = 20;
+            obstacle_collision_width = 60;
+            obstacle_size_height = 20;
+            obstacle_size_width = 60;
+            obstacle_sprite_path = "runner_files/assets/test_obstacle.jpg";
+            obstacle_scroll_speed = 5;
+            obstacle_life_damage = 1;
+            break;
+        default:
+            break;
+    }
+
+    // create an (esentially) empty obstacle object
+    obstacle = new ObstacleEntity(OBSTACLE_POS_X, OBSTACLE_POS_Y,
+        obstacle_collision_height, obstacle_collision_width,
+        obstacle_size_height, obstacle_size_width, obstacle_sprite_path,
+        obstacle_scroll_speed, obstacle_life_damage);
 
     // add obstacle to array
     OBSTACLE_ARRAY.push(obstacle);
