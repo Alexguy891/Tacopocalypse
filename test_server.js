@@ -43,11 +43,31 @@ TACO_13 = "server_files/assets/taco13.png";
 TACO_14 = "server_files/assets/taco14.png";
 TACO_15 = "server_files/assets/taco15.png";
 TACO_16 = "server_files/assets/taco16.png";
-// placeholder images for missing taco combos
-TACO_17 = "server_files/assets/Taco_Shell.png";
-TACO_18 = "server_files/assets/Taco_Shell.png";
-TACO_19 = "server_files/assets/Taco_Shell.png";
-TACO_20 = "server_files/assets/Taco_Shell.png";
+TACO_17 = "server_files/assets/taco17.png";
+TACO_18 = "server_files/assets/taco18.png";
+TACO_19 = "server_files/assets/taco19.png";
+TACO_20 = "server_files/assets/taco20.png";
+// placeholders
+TACO_21 = "server_files/assets/Taco_Shell.png";
+TACO_22 = "server_files/assets/Taco_Shell.png";
+TACO_23 = "server_files/assets/Taco_Shell.png";
+TACO_24 = "server_files/assets/Taco_Shell.png";
+TACO_25 = "server_files/assets/Taco_Shell.png";
+TACO_26 = "server_files/assets/Taco_Shell.png";
+TACO_27 = "server_files/assets/Taco_Shell.png";
+TACO_28 = "server_files/assets/Taco_Shell.png";
+TACO_29 = "server_files/assets/Taco_Shell.png";
+TACO_30 = "server_files/assets/Taco_Shell.png";
+// TACO_21 = "server_files/assets/taco21.png";
+// TACO_22 = "server_files/assets/taco22.png";
+// TACO_23 = "server_files/assets/taco23.png";
+// TACO_24 = "server_files/assets/taco24.png";
+// TACO_25 = "server_files/assets/taco25.png";
+// TACO_26 = "server_files/assets/taco26.png";
+// TACO_27 = "server_files/assets/taco27.png";
+// TACO_28 = "server_files/assets/taco28.png";
+// TACO_29 = "server_files/assets/taco29.png";
+// TACO_30 = "server_files/assets/taco30.png";
 
 // order position constants
 INITIAL_X = 350;
@@ -87,6 +107,16 @@ function setup() {
     orderImages.push(TACO_18);
     orderImages.push(TACO_19);
     orderImages.push(TACO_20);
+    orderImages.push(TACO_21);
+    orderImages.push(TACO_22);
+    orderImages.push(TACO_23);
+    orderImages.push(TACO_24);
+    orderImages.push(TACO_25);
+    orderImages.push(TACO_26);
+    orderImages.push(TACO_27);
+    orderImages.push(TACO_28);
+    orderImages.push(TACO_29);
+    orderImages.push(TACO_30);
 
     orderList.push(["beef"]);
     orderList.push(["beef", "lettuce"]);
@@ -108,6 +138,16 @@ function setup() {
     orderList.push(["lettuce"]);
     orderList.push(["cheese"]);
     orderList.push(["sour_cream"]);
+    orderList.push(["cheese", "tomato"]);
+    orderList.push(["cheese", "lettuce"]);
+    orderList.push(["cheese", "sour_cream"]);
+    orderList.push(["cheese", "lettuce", "tomato"]);
+    orderList.push(["cheese", "sour_cream", "tomato"]);
+    orderList.push(["cheese", "lettuce", "sour_cream", "tomato"  ]);
+    orderList.push(["lettuce", "tomato"]);
+    orderList.push(["sour_cream", "tomato" ]);
+    orderList.push(["lettuce", "sour_cream", "tomato"]);
+    orderList.push(["lettuce", "sour_cream"]);
 
     // generate first order
     order = generateOrder();
