@@ -14,7 +14,7 @@ class RunnerEntity extends Entity {
 
         // for jumping
         this.velocity = 0;
-        this.gravity = 5;
+        this.gravity = 12;
     }
 
     // loss of lives
@@ -22,15 +22,24 @@ class RunnerEntity extends Entity {
         if (ObstacleEntity.lifeDamage == 0) { // Platforms do not damage player
           this.isStandable(ObstacleEntity);
         }
-        if (
-          (ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[0] >= this.positionArray[0]) &&
-(ObstacleEntity.positionArray[0] <= this.positionArray[0] + this.collisionArray[0]) &&
-(ObstacleEntity.positionArray[1] + ObstacleEntity.collisionArray[1] >= this.positionArray[1]) &&
-(ObstacleEntity.positionArray[1] <= this.positionArray[1] + this.collisionArray[1]) && (lastHit + 20 <= score)) {
+        // if ((ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[0] >= this.positionArray[0]) &&
+        //   (ObstacleEntity.positionArray[0] <= this.positionArray[0] + this.collisionArray[0]) &&
+        //   (ObstacleEntity.positionArray[1] + ObstacleEntity.collisionArray[1] >= this.positionArray[1]) &&
+        //   (ObstacleEntity.positionArray[1] <= this.positionArray[1] + this.collisionArray[1]) && (lastHit + 20 <= score)) {
+        if(((this.positionArray[0] + this.collisionArray[0] >= ObstacleEntity.positionArray[0] && 
+          this.positionArray[0] <= ObstacleEntity.positionArray[0]) || 
+          (this.positionArray[0] <= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[0] &&
+          this.positionArray[0] + this.collisionArray[1] >= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[1])) && 
+          this.positionArray[1] + this.collisionArray[1] >= ObstacleEntity.positionArray[1]) {
+            console.log(this.positionArray[0] + " + " + this.collisionArray[0] + " >= " + ObstacleEntity.positionArray[0]);
+            console.log(this.positionArray[1] + " + " + this.collisionArray[1] + "<=" + ObstacleEntity.positionArray[1]);
             this.livesAmount -= ObstacleEntity.lifeDamage;
-          lastHit = score;
-          
+            lastHit = score;
         }  
+
+        // (this.positionArray[0] <= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[1] &&
+        //   this.positionArray[0] + this.collisionArray[1] >= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[1]))
+
         if (this.livesAmount <= 0) {//todo: on death, stop counting score and 
             this.dead = true;
           print("player death")
@@ -79,11 +88,6 @@ class RunnerEntity extends Entity {
         noFill();
         rect(this.positionArray[0], this.positionArray[1], this.collisionArray[0], this.collisionArray[1]);
       }
-
-      //basic hud
-      text('lives: '+ this.livesAmount, 10, 30);
-      score += (second() / 100)
-      text('score: '+ round(score), 10, 50);
         
       // for jumping
       if(this.positionArray[1] + this.collisionArray[1] < height) {
@@ -95,7 +99,7 @@ class RunnerEntity extends Entity {
       
       // spacebar jump
       if(keyIsDown(32) && this.positionArray[1] + this.collisionArray[1] >= height) {
-          this.velocity = -25;
+          this.velocity = -50;
           keyCode = DOWN_ARROW;
       }
     }

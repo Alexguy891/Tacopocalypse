@@ -145,6 +145,6 @@ function generateObstacle() {
             ZOMBIE_SPRITE_PATH, zombieSpeed, RUNNER_DAMAGE); 
 
         // add obstacle to array
-        OBSTACLE_ARRAY.push(obstacle);
+        OBSTACLE_ARRAY.push(obstacle); 
     }
 }
