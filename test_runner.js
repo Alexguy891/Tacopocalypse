@@ -15,7 +15,7 @@ let MAX_OBSTACLE_SPAWN_TIME = 2500;
 
 // obstacle constants
 let RUNNER_DAMAGE = 1;
-let SCROLL_SPEED = 5;
+let SCROLL_SPEED = 10;
 
 // rubble obstacle constants
 let RUBBLE_POS_Y = 400 - 28;
@@ -135,10 +135,14 @@ function generateObstacle() {
                 break;
         }
     } else {
+        min = Math.ceil(5);
+        max = Math.floor(15);
+        zombieSpeed = Math.floor(Math.random() * (max - min) + min);
+
         // Zombie
         obstacle = new ObstacleEntity(OBSTACLE_POS_X, ZOMBIE_POS_Y,
             ZOMBIE_COLLISION_HEIGHT, ZOMBIE_COLLISION_WIDTH, ZOMBIE_SIZE_HEIGHT, ZOMBIE_SIZE_WIDTH,
-            ZOMBIE_SPRITE_PATH, ZOMBIE_SPEED, RUNNER_DAMAGE); 
+            ZOMBIE_SPRITE_PATH, zombieSpeed, RUNNER_DAMAGE); 
 
         // add obstacle to array
         OBSTACLE_ARRAY.push(obstacle);
