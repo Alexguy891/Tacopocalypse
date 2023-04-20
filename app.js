@@ -342,8 +342,10 @@ function draw() {
             SCROLL_SPEED += 1;
             minZombieSpeed += 1;
             maxZombieSpeed += 1;
-            MIN_OBSTACLE_SPAWN_TIME -= 200;
-            MIN_OBSTACLE_SPAWN_TIME += 200;
+            if(MAX_OBSTACLE_SPAWN_TIME > 200 && MIN_OBSTACLE_SPAWN_TIME > 100) {
+                MAX_OBSTACLE_SPAWN_TIME -= 200;
+                MIN_OBSTACLE_SPAWN_TIME -= 100;
+            }
         }
 
         background(220);
@@ -657,6 +659,9 @@ function resetRunner() {
         runnerLives = runner.livesAmount;
     } else {
         runnerLives = TRUCK_LIVES_AMOUNT;
+        MIN_OBSTACLE_SPAWN_TIME = 500;
+        MAX_OBSTACLE_SPAWN_TIME = 2000;
+        SCROLL_SPEED = 10;
     }
 
     // create runner
@@ -686,7 +691,7 @@ function resetServer() {
      ingredient = new Ingredient(0, 0, "server_files/assets/Ground_Beef.png", "beef");
 
      // for showing/hiding on ingredient spawn
-     showIngredient = false; 
+     showIngredient = false;
 }
 
 function resetRunnerTimer() {
