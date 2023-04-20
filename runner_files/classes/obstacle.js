@@ -1,4 +1,3 @@
-ObstacleList = [];
 showHitboxes = true;
 class ObstacleEntity extends Entity {
     constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, scrollSpeed, lifeDamage) {
@@ -17,7 +16,8 @@ class ObstacleEntity extends Entity {
             console.log("Invalid lifeDamage passed to ObstacleEntity.")
         }
         this.lifeDamage = lifeDamage;
-      ObstacleList.push(this);
+
+        this.squished = false;
     }
 
     show() {
