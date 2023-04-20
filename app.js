@@ -626,6 +626,7 @@ function resetServer() {
      ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
      ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
      ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
+    currentIngredientStack = [];
 
      // ingredient declaration
      ingredient = new Ingredient(0, 0, "server_files/assets/Ground_Beef.png", "beef");
