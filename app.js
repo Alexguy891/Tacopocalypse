@@ -26,15 +26,25 @@ let INSTRUCTIONS_BUTTON_COORDINATES = [575, 7, 679, 41];
 // game over menu button coordinates
 let RESTART_BUTTON_COORDINATES = [161, 230, 536, 290];
 
+// truck constants
+let TRUCK_POS_X = 100;
+let TRUCK_COLLISION_HEIGHT = 70;
+let TRUCK_COLLISION_WIDTH = 60;
+let TRUCK_SIZE_HEIGHT = 100;
+let TRUCK_SIZE_WIDTH = 100;
+let TRUCK_SPRITE_PATH = "runner_files/assets/Food_Truck.png"
+let TRUCK_LIVES_AMOUNT = 4;
+let TRUCK_POS_Y = 400 - 60;
+
 // runner constants
 let RUNNER_POS_X = 100;
-let RUNNER_COLLISION_HEIGHT = 70;
-let RUNNER_COLLISION_WIDTH = 60;
-let RUNNER_SIZE_HEIGHT = 100;
-let RUNNER_SIZE_WIDTH = 100;
-let RUNNER_SPRITE_PATH = "runner_files/assets/Food_Truck.png"
-let RUNNER_LIVES_AMOUNT = 3;
-let RUNNER_POS_Y = 400 - 60;
+let RUNNER_COLLISION_HEIGHT = 22;
+let RUNNER_COLLISION_WIDTH = 30;
+let RUNNER_SIZE_HEIGHT = 30;
+let RUNNER_SIZE_WIDTH = 30;
+let RUNNER_SPRITE_PATH = "runner_files/assets/runner.png"
+let RUNNER_LIVES_AMOUNT = 1;
+let RUNNER_POS_Y = 400 - 30;
 
 // obstacle position spawn constants
 let OBSTACLE_POS_X = 720;
@@ -42,7 +52,7 @@ let MIN_OBSTACLE_SPAWN_TIME = 500;
 let MAX_OBSTACLE_SPAWN_TIME = 2500;
 
 // obstacle constants
-let RUNNER_DAMAGE = 1;
+let TRUCK_DAMAGE = 1;
 let SCROLL_SPEED = 10;
 let minZombieSpeed = 5;
 let maxZombieSpeed = 15;
@@ -71,7 +81,7 @@ let SPIKEPAD_SIZE_HEIGHT = 100;
 let SPIKEPAD_SIZE_WIDTH = 100;
 let SPIKEPAD_SPRITE_PATH = "runner_files/assets/Spike_Pad_Obstacle.png";
 
-// zombie pad obstacle constants
+// zombie obstacle constants
 let ZOMBIE_POS_Y = 400 - 30;
 let ZOMBIE_COLLISION_HEIGHT = 20;
 let ZOMBIE_COLLISION_WIDTH = 60;
@@ -79,6 +89,14 @@ let ZOMBIE_SIZE_HEIGHT = 60;
 let ZOMBIE_SIZE_WIDTH = 60;
 let ZOMBIE_SPRITE_PATH = "runner_files/assets/Zombie_Obstacle.png";
 let ZOMBIE_SPEED = 7;
+
+// squished zombie constants
+let SQUISHED_POS_Y = 400 - 5;
+let SQUISHED_COLLISION_HEIGHT = 20;
+let SQUISHED_COLLISION_WIDTH = 5;
+let SQUISHED_SIZE_HEIGHT = 60;
+let SQUISHED_SIZE_WIDTH = 60;
+let SQUISHED_SPRITE_PATH = "runner_files/assets/Squished_Zombie.png";
 
 // obstacle object array
 let OBSTACLE_ARRAY = [];
@@ -165,11 +183,9 @@ function setup() {
         createCanvas(720, 400);
 
         // create runner
-        runner = new RunnerEntity(RUNNER_POS_X, RUNNER_POS_Y, RUNNER_COLLISION_HEIGHT, 
-            RUNNER_COLLISION_WIDTH, RUNNER_SIZE_HEIGHT,
-            RUNNER_SIZE_WIDTH, RUNNER_SPRITE_PATH, RUNNER_LIVES_AMOUNT);
-            
-        background(220);
+        runner = new RunnerEntity(TRUCK_POS_X, TRUCK_POS_Y, TRUCK_COLLISION_HEIGHT, 
+            TRUCK_COLLISION_WIDTH, TRUCK_SIZE_HEIGHT,
+            TRUCK_SIZE_WIDTH, TRUCK_SPRITE_PATH, TRUCK_LIVES_AMOUNT);
 
         // push all images to orderImages array
         orderImages.push(TACO_1);
@@ -262,7 +278,11 @@ function setup() {
 
         // for showing/hiding on ingredient spawn
         showIngredient = false;
-}
+
+        // for preventing repeated runner creation
+        lastLife = false;
+}       
+
 
 function draw() {
     // check if game is in start state
@@ -294,6 +314,13 @@ function draw() {
 
     // check if game is in runner state
     if(gameState == States.runner) {
+        if(runner.livesAmount == 1 && !lastLife) {
+            lastLife = true;
+            runner = new RunnerEntity(RUNNER_POS_X, RUNNER_POS_Y, RUNNER_COLLISION_HEIGHT, 
+                RUNNER_COLLISION_WIDTH, RUNNER_SIZE_HEIGHT,
+                RUNNER_SIZE_WIDTH, RUNNER_SPRITE_PATH, RUNNER_LIVES_AMOUNT);
+        }
+
         // change to gameover if runner is dead
         if(runner.dead) {
             gameState = States.gameover;
@@ -315,13 +342,19 @@ function draw() {
             SCROLL_SPEED += 1;
             minZombieSpeed += 1;
             maxZombieSpeed += 1;
+            MIN_OBSTACLE_SPAWN_TIME -= 200;
+            MIN_OBSTACLE_SPAWN_TIME += 200;
         }
 
         background(220);
 
         // display runner
         runner.show();
-
+        
+        text("Score: " + runner.playerScore, 10, 20);
+        text("Lives: " + runner.livesAmount, 10, 40);
+        text("Time: " + (currentRunnerTimer - millis()) / 1000 + "s", 10, 60);
+        
         // generate obstacle after random time
         if(millis() > spawnTimer) {
             generateObstacle();
@@ -337,6 +370,12 @@ function draw() {
         // checking for collision of all obstacles
         for (let i = 0; i < OBSTACLE_ARRAY.length; i++) {
             runner.collision(OBSTACLE_ARRAY[i]);
+
+            if(OBSTACLE_ARRAY[i].squished) {
+                OBSTACLE_ARRAY[i] = new ObstacleEntity(OBSTACLE_ARRAY[i].positionArray[0], SQUISHED_POS_Y, 
+                    SQUISHED_COLLISION_HEIGHT, SQUISHED_COLLISION_WIDTH, SQUISHED_SIZE_HEIGHT, SQUISHED_SIZE_WIDTH,
+                    SQUISHED_SPRITE_PATH, SCROLL_SPEED, OBSTACLE_ARRAY[i].lifeDamage);
+            }
         }
 
         // remove obstacles that are out of bounds
@@ -345,10 +384,6 @@ function draw() {
                 OBSTACLE_ARRAY.splice(i, 1);
             }
         }
-
-        text("Score: " + runner.score, 10, 20);
-        text("Lives: " + runner.livesAmount, 10, 40);
-        text("Time: " + (currentRunnerTimer - millis()) / 1000 + "s", 10, 60);
     } 
     
     // check if game is in server state
@@ -402,33 +437,33 @@ function draw() {
 
 function generateObstacle() {
     // randomly generate type of obstacle
-    obstaclePick = Math.floor(Math.random() * 10)
+    obstaclePick = Math.floor(Math.random() * 7)
 
-    if(obstaclePick > 6) {
+    if(obstaclePick > 3) {
         switch(obstaclePick) {
-            case 7:
+            case 4:
                 // Rubble
                 obstacle = new ObstacleEntity(OBSTACLE_POS_X, RUBBLE_POS_Y,
                     RUBBLE_COLLISION_HEIGHT, RUBBLE_COLLISION_WIDTH, RUBBLE_SIZE_HEIGHT, RUBBLE_SIZE_WIDTH,
-                    RUBBLE_SPRITE_PATH, SCROLL_SPEED, RUNNER_DAMAGE); 
+                    RUBBLE_SPRITE_PATH, SCROLL_SPEED, TRUCK_DAMAGE); 
 
                 // add obstacle to array
                 OBSTACLE_ARRAY.push(obstacle);
                 break;
-            case 8:
+            case 5:
                 // Wall
                 obstacle = new ObstacleEntity(OBSTACLE_POS_X, WALL_POS_Y,
                     WALL_COLLISION_HEIGHT, WALL_COLLISION_WIDTH, WALL_SIZE_HEIGHT, WALL_SIZE_WIDTH,
-                    WALL_SPRITE_PATH, SCROLL_SPEED, RUNNER_DAMAGE); 
+                    WALL_SPRITE_PATH, SCROLL_SPEED, TRUCK_DAMAGE); 
 
                 // add obstacle to array
                 OBSTACLE_ARRAY.push(obstacle);
                 break;
-            case 9:
+            case 6:
                 // Spike Pad
                 obstacle = new ObstacleEntity(OBSTACLE_POS_X, SPIKEPAD_POS_Y,
                     SPIKEPAD_COLLISION_HEIGHT, SPIKEPAD_COLLISION_WIDTH, SPIKEPAD_SIZE_HEIGHT, SPIKEPAD_SIZE_WIDTH,
-                    SPIKEPAD_SPRITE_PATH, SCROLL_SPEED, RUNNER_DAMAGE); 
+                    SPIKEPAD_SPRITE_PATH, SCROLL_SPEED, TRUCK_DAMAGE); 
 
                 // add obstacle to array
                 OBSTACLE_ARRAY.push(obstacle);
@@ -443,9 +478,15 @@ function generateObstacle() {
         zombieSpeed = Math.floor(Math.random() * (max - min) + min);
 
         // Zombie
+        if(runner.livesAmount == 1) {
+            runnerDamage = 1;
+        } else {
+            runnerDamage = 0;
+        }
+
         obstacle = new ObstacleEntity(OBSTACLE_POS_X, ZOMBIE_POS_Y,
             ZOMBIE_COLLISION_HEIGHT, ZOMBIE_COLLISION_WIDTH, ZOMBIE_SIZE_HEIGHT, ZOMBIE_SIZE_WIDTH,
-            ZOMBIE_SPRITE_PATH, zombieSpeed, RUNNER_DAMAGE); 
+            ZOMBIE_SPRITE_PATH, zombieSpeed, runnerDamage); 
 
         // add obstacle to array
         OBSTACLE_ARRAY.push(obstacle);
@@ -533,28 +574,28 @@ function mouseReleased() {
     // checks if mouse on start button and game is in start state
     if(gameState == States.start) { 
         if(mouseX > START_BUTTON_COORDINATES[0] && mouseY > START_BUTTON_COORDINATES[1] && mouseX < START_BUTTON_COORDINATES[2] && mouseY < START_BUTTON_COORDINATES[3]) {
+            // reset runner
+            resetRunner();
+            
             // change game state to runner
             gameState = States.runner;
 
             // reset runner timer
             resetRunnerTimer();
-
-            // reset runner
-            resetRunner();
         }
     }
 
     // checks if mouse on restart button and game is in gameover state
     if(gameState == States.gameover) { 
         if(mouseX > RESTART_BUTTON_COORDINATES[0] && mouseY > RESTART_BUTTON_COORDINATES[1] && mouseX < RESTART_BUTTON_COORDINATES[2] && mouseY < RESTART_BUTTON_COORDINATES[3]) {
+            // reset runner
+            resetRunner();
+            
             // change game state to runner
             gameState = States.runner;
 
             // reset runner timer
             resetRunnerTimer();
-
-            // reset runner
-            resetRunner();
 
             // reset playerScore
             playerScore = 0;
@@ -612,11 +653,22 @@ function showIngredientStack() {
 // resets runner gameplay
 function resetRunner() {
     OBSTACLE_ARRAY = [];
+    if(gameState == States.server) {
+        runnerLives = runner.livesAmount;
+    } else {
+        runnerLives = TRUCK_LIVES_AMOUNT;
+    }
 
     // create runner
-    runner = new RunnerEntity(RUNNER_POS_X, RUNNER_POS_Y, RUNNER_COLLISION_HEIGHT, 
-        RUNNER_COLLISION_WIDTH, RUNNER_SIZE_HEIGHT,
-        RUNNER_SIZE_WIDTH, RUNNER_SPRITE_PATH, RUNNER_LIVES_AMOUNT);
+    if(runner.livesAmount != 1) {
+        runner = new RunnerEntity(TRUCK_POS_X, TRUCK_POS_Y, TRUCK_COLLISION_HEIGHT, 
+            TRUCK_COLLISION_WIDTH, TRUCK_SIZE_HEIGHT,
+            TRUCK_SIZE_WIDTH, TRUCK_SPRITE_PATH, runnerLives);
+    } else {
+        runner = new RunnerEntity(RUNNER_POS_X, RUNNER_POS_Y, RUNNER_COLLISION_HEIGHT, 
+            RUNNER_COLLISION_WIDTH, RUNNER_SIZE_HEIGHT,
+            RUNNER_SIZE_WIDTH, RUNNER_SPRITE_PATH, RUNNER_LIVES_AMOUNT);
+    }
 }
 
 // resets server gameplay
