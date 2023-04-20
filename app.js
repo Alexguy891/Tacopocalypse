@@ -351,7 +351,7 @@ function draw() {
         // display runner
         runner.show();
         
-        text("Score: " + runner.playerScore, 10, 20);
+        text("Score: " + playerScore, 10, 20);
         text("Lives: " + runner.livesAmount, 10, 40);
         text("Time: " + (currentRunnerTimer - millis()) / 1000 + "s", 10, 60);
         
