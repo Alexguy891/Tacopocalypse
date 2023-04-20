@@ -31,8 +31,6 @@ class RunnerEntity extends Entity {
           (this.positionArray[0] <= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[0] &&
           this.positionArray[0] + this.collisionArray[1] >= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[1])) && 
           this.positionArray[1] + this.collisionArray[1] >= ObstacleEntity.positionArray[1]) {
-            console.log(this.positionArray[0] + " + " + this.collisionArray[0] + " >= " + ObstacleEntity.positionArray[0]);
-            console.log(this.positionArray[1] + " + " + this.collisionArray[1] + "<=" + ObstacleEntity.positionArray[1]);
             this.livesAmount -= ObstacleEntity.lifeDamage;
             lastHit = score;
         }  

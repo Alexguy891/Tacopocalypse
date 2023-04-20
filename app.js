@@ -14,6 +14,8 @@ var previousGameState = States.start;
 // timers
 let runnerTimer = 20000;
 let serverTimer = 15000;
+var currentRunnerTimer = runnerTimer;
+var currentServerTimer = serverTimer;
 var differenceFromRunnerTimer = 0;
 var differenceFromServerTimer = 0;
 
@@ -292,18 +294,15 @@ function draw() {
 
     // check if game is in runner state
     if(gameState == States.runner) {
-        console.log((runnerTimer - millis()) / 1000);
-
+        console.log((currentRunnerTimer - millis()) / 1000 + "ms");
         // change to gameover if runner is dead
         if(runner.dead) {
             gameState = States.gameover;
             runner.dead = false;
         }
 
-        // console.log(runner.livesAmount);
-
         // switch to server state if runner timer ends
-        if(millis() > runnerTimer) {
+        if(millis() > currentRunnerTimer) {
             // reset server
             resetServer();
 
@@ -311,7 +310,7 @@ function draw() {
             gameState = States.server;
 
             // start server timer
-            serverTimer = millis() + serverTimer;
+            resetServerTimer();
 
             // increase obstacle speeds
             SCROLL_SPEED += 1;
@@ -351,10 +350,9 @@ function draw() {
     
     // check if game is in server state
     if(gameState == States.server) {
-        console.log((serverTimer - millis()) / 1000);
-
+        console.log((currentServerTimer - millis()) / 1000 + "ms");
         // switch to runner state if server timer ends
-        if(millis() > serverTimer) {
+        if(millis() > currentServerTimer) {
             // reset runner
             resetRunner();
 
@@ -362,7 +360,7 @@ function draw() {
             gameState = States.runner;
 
             // start runner timer
-            runnerTimer = millis() + runnerTimer;
+            resetRunnerTimer();
         }
 
         background(220);
@@ -460,7 +458,6 @@ function setIfLoop() {
 //increases the player's score
 function increaseScore(scoreIncrease) {
     playerScore += scoreIncrease;
-    console.log(playerScore);
 }
 
 // runs when mouse pressed anywhere
@@ -538,7 +535,7 @@ function mouseReleased() {
             gameState = States.runner;
 
             // reset runner timer
-            runnerTimer = millis() + runnerTimer;
+            resetRunnerTimer();
 
             // reset runner
             resetRunner();
@@ -552,7 +549,7 @@ function mouseReleased() {
             gameState = States.runner;
 
             // reset runner timer
-            runnerTimer = millis() + runnerTimer;
+            resetRunnerTimer();
 
             // reset runner
             resetRunner();
@@ -590,9 +587,7 @@ function sortArrayEquals(array1, array2) {
 
     // check individual items
     for(var i = 0; i < array1.length; i++) {
-        console.log(array1[i] + " ?= " + array2[i]);
         if(array1[i] != array2[i]) {
-            console.log("Arrays not equal");
             return false;
         }
     }
@@ -604,11 +599,9 @@ function sortArrayEquals(array1, array2) {
 function showIngredientStack() { 
     for(var i = 0; i < orderList.length; i++) {
         if(sortArrayEquals(currentIngredientStack, orderList[i])) {
-            console.log("Found same order");
             ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], orderImages[i], "stack");
             ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
             ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
-            console.log("Ingredient stack: " + ingredientStack.spritePath);
             return ingredientStack;
         }
     }
@@ -639,4 +632,12 @@ function resetServer() {
 
      // for showing/hiding on ingredient spawn
      showIngredient = false; 
+}
+
+function resetRunnerTimer() {
+    currentRunnerTimer = millis() + runnerTimer;
+}
+
+function resetServerTimer() {
+    currentServerTimer = millis() + serverTimer;
 }
