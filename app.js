@@ -169,6 +169,7 @@ function setup() {
             
         background(220);
 
+        // push all images to orderImages array
         orderImages.push(TACO_1);
         orderImages.push(TACO_2);
         orderImages.push(TACO_3);
@@ -201,6 +202,7 @@ function setup() {
         orderImages.push(TACO_30);
         orderImages.push(TACO_31);
 
+        // push all order combos to orderList array
         orderList.push(["beef"]);
         orderList.push(["beef", "lettuce"]);
         orderList.push(["beef", "cheese"]);
@@ -261,40 +263,60 @@ function setup() {
 }
 
 function draw() {
+    // check if game is in start state
     if(gameState == States.start) {
+        // show start screen
         image(startScreen, 0, 0, 720, 400);
 
+        // highlight start button if mouse over it
         if(mouseX > START_BUTTON_COORDINATES[0] && mouseY > START_BUTTON_COORDINATES[1] && mouseX < START_BUTTON_COORDINATES[2] && mouseY < START_BUTTON_COORDINATES[3]) {
             image(startScreenStartHighlight, 0, 0, 720, 400);
         }
 
+        // highlight instructions button if mouse over it
         if(mouseX > INSTRUCTIONS_BUTTON_COORDINATES[0] && mouseY > INSTRUCTIONS_BUTTON_COORDINATES[1] && mouseX < INSTRUCTIONS_BUTTON_COORDINATES[2] && mouseY < INSTRUCTIONS_BUTTON_COORDINATES[3]) {
             image(startScreenInstructionsHighlight, 0, 0, 720, 400);
         }
     }
 
+    // check if game is in gameover state
     if(gameState == States.gameover) {
+        // show gameover screen
         image(gameOverScreen, 0, 0, 720, 400);
 
+        // highlight restart button if mouse over it
         if(mouseX > RESTART_BUTTON_COORDINATES[0] && mouseY > RESTART_BUTTON_COORDINATES[1] && mouseX < RESTART_BUTTON_COORDINATES[2] && mouseY < RESTART_BUTTON_COORDINATES[3]) {
             image(gameOverScreenHighlight, 0, 0, 720, 400);
         }
     }
 
+    // check if game is in runner state
     if(gameState == States.runner) {
+        console.log((runnerTimer - millis()) / 1000);
+
+        // change to gameover if runner is dead
         if(runner.dead) {
             gameState = States.gameover;
+            runner.dead = false;
         }
 
-       // console.log(runner.livesAmount);
+        // console.log(runner.livesAmount);
 
+        // switch to server state if runner timer ends
         if(millis() > runnerTimer) {
+            // reset server
+            resetServer();
+
+            // switch to server state
             gameState = States.server;
+
+            // start server timer
             serverTimer = millis() + serverTimer;
+
+            // increase obstacle speeds
             SCROLL_SPEED += 1;
             minZombieSpeed += 1;
             maxZombieSpeed += 1;
-            resetRunner();
         }
 
         background(220);
@@ -325,11 +347,22 @@ function draw() {
                 OBSTACLE_ARRAY.splice(i, 1);
             }
         }
-    } else if(gameState == States.server) {
+    } 
+    
+    // check if game is in server state
+    if(gameState == States.server) {
+        console.log((serverTimer - millis()) / 1000);
+
+        // switch to runner state if server timer ends
         if(millis() > serverTimer) {
+            // reset runner
+            resetRunner();
+
+            // switch state
             gameState = States.runner;
+
+            // start runner timer
             runnerTimer = millis() + runnerTimer;
-            resetServer();
         }
 
         background(220);
@@ -359,8 +392,10 @@ function draw() {
             increaseScore(100);
         }
 
+        // show order
         order.show();
         
+        // show ingredient stack
         ingredientStack.show();
     }
 }
@@ -402,6 +437,7 @@ function generateObstacle() {
                 break;
         }
     } else {
+        // generate zombie speeds
         min = Math.ceil(minZombieSpeed);
         max = Math.floor(maxZombieSpeed);
         zombieSpeed = Math.floor(Math.random() * (max - min) + min);
@@ -429,7 +465,7 @@ function increaseScore(scoreIncrease) {
 
 // runs when mouse pressed anywhere
 function mousePressed() {
-    // checks for mouse click
+    // checks for mouse click on draggable object
     ingredient.clicked();
     ingredientStack.clicked();
 
@@ -441,6 +477,7 @@ function mousePressed() {
 }
 
 function checkTubCoordinates() {
+    // checks if mouse is in tub coordinates and spawn its ingredient
     if (mouseX > CHEESE_TUB_COORDINATES[0] && mouseY > CHEESE_TUB_COORDINATES[1] && mouseX < CHEESE_TUB_COORDINATES[2] && mouseY < CHEESE_TUB_COORDINATES[3]) {
         ingredient = new Cheese(CHEESE_SPAWN_COORDINATES[0], CHEESE_SPAWN_COORDINATES[1]);
         showIngredient = true;
@@ -490,27 +527,37 @@ function mouseReleased() {
         ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
     }
 
-     // checks for mouse release
-     ingredient.release();
-     ingredientStack.release();
+    // checks for mouse release of draggable object
+    ingredient.release();
+    ingredientStack.release();
 
+    // checks if mouse on start button and game is in start state
     if(gameState == States.start) { 
         if(mouseX > START_BUTTON_COORDINATES[0] && mouseY > START_BUTTON_COORDINATES[1] && mouseX < START_BUTTON_COORDINATES[2] && mouseY < START_BUTTON_COORDINATES[3]) {
+            // change game state to runner
             gameState = States.runner;
+
+            // reset runner timer
             runnerTimer = millis() + runnerTimer;
-            serverTimer = millis() + serverTimer;
+
+            // reset runner
             resetRunner();
-            resetServer();
         }
     }
 
+    // checks if mouse on restart button and game is in gameover state
     if(gameState == States.gameover) { 
         if(mouseX > RESTART_BUTTON_COORDINATES[0] && mouseY > RESTART_BUTTON_COORDINATES[1] && mouseX < RESTART_BUTTON_COORDINATES[2] && mouseY < RESTART_BUTTON_COORDINATES[3]) {
+            // change game state to runner
             gameState = States.runner;
+
+            // reset runner timer
             runnerTimer = millis() + runnerTimer;
-            serverTimer = millis() + serverTimer;
+
+            // reset runner
             resetRunner();
-            resetServer();
+
+            // reset playerScore
             playerScore = 0;
         }
     }
@@ -525,6 +572,7 @@ function getRandomInt(max) {
 function generateOrder() {
     chooseOrder = getRandomInt(15);
     order = new TacoOrder(INITIAL_X, INITIAL_Y, orderImages[chooseOrder], orderList[chooseOrder]);
+
     // orderTest = orderList[chooseOrder];
     return order;
 }
