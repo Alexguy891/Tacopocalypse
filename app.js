@@ -294,7 +294,6 @@ function draw() {
 
     // check if game is in runner state
     if(gameState == States.runner) {
-        console.log((currentRunnerTimer - millis()) / 1000 + "ms");
         // change to gameover if runner is dead
         if(runner.dead) {
             gameState = States.gameover;
@@ -346,11 +345,14 @@ function draw() {
                 OBSTACLE_ARRAY.splice(i, 1);
             }
         }
+
+        text("Score: " + runner.score, 10, 20);
+        text("Lives: " + runner.livesAmount, 10, 40);
+        text("Time: " + (currentRunnerTimer - millis()) / 1000 + "s", 10, 60);
     } 
     
     // check if game is in server state
     if(gameState == States.server) {
-        console.log((currentServerTimer - millis()) / 1000 + "ms");
         // switch to runner state if server timer ends
         if(millis() > currentServerTimer) {
             // reset runner

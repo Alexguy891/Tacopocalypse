@@ -1,5 +1,7 @@
 var score = 0;
 var lastHit = 0; //stores second, minute for hit detection
+var hitResetTimer = 2000;
+var currentResetTimer = -1;
 showHitboxes = true;
 
 class RunnerEntity extends Entity {
@@ -31,8 +33,10 @@ class RunnerEntity extends Entity {
           (this.positionArray[0] <= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[0] &&
           this.positionArray[0] + this.collisionArray[1] >= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[1])) && 
           this.positionArray[1] + this.collisionArray[1] >= ObstacleEntity.positionArray[1]) {
-            this.livesAmount -= ObstacleEntity.lifeDamage;
-            lastHit = score;
+            if(millis() > currentResetTimer) {
+              this.livesAmount -= ObstacleEntity.lifeDamage;
+              currentResetTimer = millis() + hitResetTimer;
+            }
         }  
 
         // (this.positionArray[0] <= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[1] &&
@@ -81,7 +85,7 @@ class RunnerEntity extends Entity {
       image(this.spriteImage, this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
       // fill(51);
       // rect(this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
-      
+
       if(showHitboxes) {
         noFill();
         rect(this.positionArray[0], this.positionArray[1], this.collisionArray[0], this.collisionArray[1]);
