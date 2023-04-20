@@ -1,18 +1,20 @@
-var score = 0;
-var lastHit = 0; //stores second, minute for hit detection
+// length of time between hits
 var hitResetTimer = 2000;
+
+// for current hit timer
 var currentResetTimer = -1;
 
+// for showing runner hitboxes
 showHitboxes = true;
 
 class RunnerEntity extends Entity {
     constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, livesAmount) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, true, true);
 
-        // status
+        // status of dead or alive
         this.dead = false;
 
-        // lives before reset
+        // lives before death
         this.livesAmount = livesAmount;
 
         // for jumping
@@ -22,52 +24,60 @@ class RunnerEntity extends Entity {
 
     // loss of lives
     collision(ObstacleEntity) {
-        if(((this.positionArray[0] + this.collisionArray[0] >= ObstacleEntity.positionArray[0] && 
-          this.positionArray[0] <= ObstacleEntity.positionArray[0]) || 
-          (this.positionArray[0] <= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[0] &&
-          this.positionArray[0] + this.collisionArray[1] >= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[1])) && 
-          this.positionArray[1] + this.collisionArray[1] >= ObstacleEntity.positionArray[1]) {
-            if(ObstacleEntity.lifeDamage > 0) {
-              if(millis() > currentResetTimer) {
-                this.livesAmount -= ObstacleEntity.lifeDamage;
-                currentResetTimer = millis() + hitResetTimer;
-              }
-            } else {
-              ObstacleEntity.squished = true;
-            }
-        }  
+      // check if hitboxes collided
+      if(((this.positionArray[0] + this.collisionArray[0] >= ObstacleEntity.positionArray[0] && 
+        this.positionArray[0] <= ObstacleEntity.positionArray[0]) || 
+        (this.positionArray[0] <= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[0] &&
+        this.positionArray[0] + this.collisionArray[1] >= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[1])) && 
+        this.positionArray[1] + this.collisionArray[1] >= ObstacleEntity.positionArray[1]) {
+          // check if obstacle deals damage
+          if(ObstacleEntity.lifeDamage > 0) {
+            // check if hit reset timer has passed
+            if(millis() > currentResetTimer) {
+              // reduce lives by damage amount
+              this.livesAmount -= ObstacleEntity.lifeDamage;
 
-        if (this.livesAmount <= 0) {
-            this.dead = true;
-            print("player death")
-        }
+              // reset timer
+              currentResetTimer = millis() + hitResetTimer;
+            }
+          } else {
+            // if object doesn't deal damage, squish it
+            ObstacleEntity.squished = true;
+          }
+      }  
+      
+      // check if dead
+      if (this.livesAmount <= 0) {
+          this.dead = true;
+      }
     }
     
     show() {
       // show image
       image(this.spriteImage, this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
-      // fill(51);
-      // rect(this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
 
-      console.log("x: " + this.positionArray[0] + ", y: " + this.positionArray[1] + " | v: " + this.velocity + " | g: " + this.gravity);
-
+      // for hitbox debugging
       if(showHitboxes) {
         noFill();
         rect(this.positionArray[0], this.positionArray[1], this.collisionArray[0], this.collisionArray[1]);
       }
         
-      // for jumping
+      // fall with gravity if above ground
       if(this.positionArray[1] + this.collisionArray[1] < height) {
         this.positionArray[1] += this.gravity;
       }  
       
-      this.positionArray[1] += this.velocity; //?? i have no clue what this does.
+      // slowly increase fall speed
+      this.positionArray[1] += this.velocity;
       this.velocity /= 1.2;
       
       // spacebar jump
       if(keyIsDown(32) && this.positionArray[1] + this.collisionArray[1] >= height) {
-          this.velocity = -50;
-          keyCode = DOWN_ARROW;
+        // increase upwards velocity
+        this.velocity = -50;
+
+        // reset key press
+        keyCode = DOWN_ARROW;
       }
     }
 }

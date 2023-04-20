@@ -7,17 +7,16 @@ const States = {
     paused: "paused"
 }
 
-// game state
+// game state variables
 var gameState = States.start;
-var previousGameState = States.start;
 
 // timers
-let runnerTimer = 20000;
-let serverTimer = 15000;
-var currentRunnerTimer = runnerTimer;
+// timer lengths
+let runnerTimer = 20000; 
+let serverTimer = 15000; 
+// current timers
+var currentRunnerTimer = runnerTimer; 
 var currentServerTimer = serverTimer;
-var differenceFromRunnerTimer = 0;
-var differenceFromServerTimer = 0;
 
 // start menu button coordinates
 let START_BUTTON_COORDINATES = [175, 231, 527, 290];
@@ -180,107 +179,45 @@ currentIngredientStack = [];
 playerScore = 0;
 
 function setup() {
-        createCanvas(720, 400);
+    // creates canvas
+    createCanvas(720, 400);
 
-        // create runner
-        runner = new RunnerEntity(TRUCK_POS_X, TRUCK_POS_Y, TRUCK_COLLISION_HEIGHT, 
-            TRUCK_COLLISION_WIDTH, TRUCK_SIZE_HEIGHT,
-            TRUCK_SIZE_WIDTH, TRUCK_SPRITE_PATH, TRUCK_LIVES_AMOUNT);
+    // push images and orders to arrays
+    pushImagesAndOrders();
 
-        // push all images to orderImages array
-        orderImages.push(TACO_1);
-        orderImages.push(TACO_2);
-        orderImages.push(TACO_3);
-        orderImages.push(TACO_4);
-        orderImages.push(TACO_5);
-        orderImages.push(TACO_6);
-        orderImages.push(TACO_7);
-        orderImages.push(TACO_8);
-        orderImages.push(TACO_9);
-        orderImages.push(TACO_10);
-        orderImages.push(TACO_11);
-        orderImages.push(TACO_12);
-        orderImages.push(TACO_13);
-        orderImages.push(TACO_14);
-        orderImages.push(TACO_15);
-        orderImages.push(TACO_16);
-        orderImages.push(TACO_17);
-        orderImages.push(TACO_18);
-        orderImages.push(TACO_19);
-        orderImages.push(TACO_20);
-        orderImages.push(TACO_21);
-        orderImages.push(TACO_22);
-        orderImages.push(TACO_23);
-        orderImages.push(TACO_24);
-        orderImages.push(TACO_25);
-        orderImages.push(TACO_26);
-        orderImages.push(TACO_27);
-        orderImages.push(TACO_28);
-        orderImages.push(TACO_29);
-        orderImages.push(TACO_30);
-        orderImages.push(TACO_31);
+    // create runner
+    runner = new RunnerEntity(TRUCK_POS_X, TRUCK_POS_Y, TRUCK_COLLISION_HEIGHT, 
+        TRUCK_COLLISION_WIDTH, TRUCK_SIZE_HEIGHT,
+        TRUCK_SIZE_WIDTH, TRUCK_SPRITE_PATH, TRUCK_LIVES_AMOUNT);
 
-        // push all order combos to orderList array
-        orderList.push(["beef"]);
-        orderList.push(["beef", "lettuce"]);
-        orderList.push(["beef", "cheese"]);
-        orderList.push(["beef", "tomato"]);
-        orderList.push(["beef", "sour_cream"]);
-        orderList.push(["beef", "cheese", "lettuce"]);
-        orderList.push(["beef", "cheese", "tomato"]);
-        orderList.push(["beef", "cheese", "sour_cream"]);
-        orderList.push(["beef", "lettuce", "tomato"]);
-        orderList.push(["beef", "lettuce", "sour_cream"]);
-        orderList.push(["beef", "sour_cream", "tomato"]);
-        orderList.push(["beef", "lettuce", "sour_cream", "tomato"]);
-        orderList.push(["beef", "cheese", "sour_cream", "tomato"]);
-        orderList.push(["beef", "cheese", "lettuce", "tomato"]);
-        orderList.push(["beef", "cheese", "lettuce", "sour_cream"]);
-        orderList.push(["beef", "cheese", "lettuce", "sour_cream", "tomato"]);
-        orderList.push(["tomato"]);
-        orderList.push(["lettuce"]);
-        orderList.push(["cheese"]);
-        orderList.push(["sour_cream"]);
-        orderList.push(["cheese", "tomato"]);
-        orderList.push(["cheese", "lettuce"]);
-        orderList.push(["cheese", "sour_cream"]);
-        orderList.push(["cheese", "lettuce", "tomato"]);
-        orderList.push(["cheese", "sour_cream", "tomato"]);
-        orderList.push(["cheese", "lettuce", "sour_cream", "tomato"  ]);
-        orderList.push(["lettuce", "tomato"]);
-        orderList.push(["sour_cream", "tomato" ]);
-        orderList.push(["lettuce", "sour_cream", "tomato"]);
-        orderList.push(["lettuce", "sour_cream"]);
-        orderList.push(["cheese", "lettuce", "sour_cream"]);
+    // generate first order
+    order = generateOrder();
 
-        // generate first order
-        order = generateOrder();
+    // create initial ingredient stack
+    ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
+    ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
+    ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
 
-        // create initial ingredient stack
-        ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
-        ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
-        ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
+    // load window art image
+    windowArt = loadImage("server_files/assets/Window_Art_v2.png");
 
-        // load window art image
-        windowArt = loadImage("server_files/assets/Window_Art_v2.png");
+    // load start screen images
+    startScreen = loadImage("menus/assets/main_menu.png");
+    startScreenStartHighlight = loadImage("menus/assets/main_menu_start_highlight.png");
+    startScreenInstructionsHighlight = loadImage("menus/assets/main_menu_instruct_highlight.png");
 
-        // load start screen images
-        startScreen = loadImage("menus/assets/main_menu.png");
-        startScreenStartHighlight = loadImage("menus/assets/main_menu_start_highlight.png");
-        startScreenInstructionsHighlight = loadImage("menus/assets/main_menu_instruct_highlight.png");
+    // load gameover screen image
+    gameOverScreen = loadImage("menus/assets/game_over.png");
+    gameOverScreenHighlight = loadImage("menus/assets/game_over_highlight.png");
 
-        // load gameover screen image
-        gameOverScreen = loadImage("menus/assets/game_over.png");
-        gameOverScreenHighlight = loadImage("menus/assets/game_over_highlight.png");
+    // ingredient declaration
+    ingredient = new Ingredient(0, 0, "server_files/assets/Ground_Beef.png", "beef");
 
-        // ingredient declaration
-        ingredient = new Ingredient(0, 0, "server_files/assets/Ground_Beef.png", "beef");
+    // for showing/hiding on ingredient spawn
+    showIngredient = false;
 
-        // for showing/hiding on ingredient spawn
-        showIngredient = false;
-
-        // for preventing repeated runner creation
-        lastLife = false;
+    // for preventing repeated runner creation
+    lastLife = false;
 }       
 
 
@@ -314,8 +251,12 @@ function draw() {
 
     // check if game is in runner state
     if(gameState == States.runner) {
+        // show chef if on lastlife
         if(runner.livesAmount == 1 && !lastLife) {
+            // prevent repeated creation
             lastLife = true;
+
+            // create chef
             runner = new RunnerEntity(RUNNER_POS_X, RUNNER_POS_Y, RUNNER_COLLISION_HEIGHT, 
                 RUNNER_COLLISION_WIDTH, RUNNER_SIZE_HEIGHT,
                 RUNNER_SIZE_WIDTH, RUNNER_SPRITE_PATH, RUNNER_LIVES_AMOUNT);
@@ -342,17 +283,21 @@ function draw() {
             SCROLL_SPEED += 1;
             minZombieSpeed += 1;
             maxZombieSpeed += 1;
+
+            // increase spawn time
             if(MAX_OBSTACLE_SPAWN_TIME > 200 && MIN_OBSTACLE_SPAWN_TIME > 100) {
                 MAX_OBSTACLE_SPAWN_TIME -= 200;
                 MIN_OBSTACLE_SPAWN_TIME -= 100;
             }
         }
 
+        // draw background
         background(220);
 
         // display runner
         runner.show();
         
+        // displays UI elements
         text("Score: " + playerScore, 10, 20);
         text("Lives: " + runner.livesAmount, 10, 40);
         text("Time: " + (currentRunnerTimer - millis()) / 1000 + "s", 10, 60);
@@ -371,8 +316,10 @@ function draw() {
         
         // checking for collision of all obstacles
         for (let i = 0; i < OBSTACLE_ARRAY.length; i++) {
+            // check each for collision
             runner.collision(OBSTACLE_ARRAY[i]);
-
+            
+            // redraw if squished
             if(OBSTACLE_ARRAY[i].squished) {
                 OBSTACLE_ARRAY[i] = new ObstacleEntity(OBSTACLE_ARRAY[i].positionArray[0], SQUISHED_POS_Y, 
                     SQUISHED_COLLISION_HEIGHT, SQUISHED_COLLISION_WIDTH, SQUISHED_SIZE_HEIGHT, SQUISHED_SIZE_WIDTH,
@@ -402,13 +349,11 @@ function draw() {
             resetRunnerTimer();
         }
 
+        // draw background
         background(220);
 
         // show window art image
         image(windowArt, 0, 0, 720, 400);
-
-        // for testing
-        stroke(0);
 
         // show ingredient if spawned
         if(showIngredient) {
@@ -441,6 +386,7 @@ function generateObstacle() {
     // randomly generate type of obstacle
     obstaclePick = Math.floor(Math.random() * 7)
 
+    // create obstacle based on obstaclePick
     if(obstaclePick > 3) {
         switch(obstaclePick) {
             case 4:
@@ -479,13 +425,14 @@ function generateObstacle() {
         max = Math.floor(maxZombieSpeed);
         zombieSpeed = Math.floor(Math.random() * (max - min) + min);
 
-        // Zombie
+        // give zombie damage if only one life left
         if(runner.livesAmount == 1) {
             runnerDamage = 1;
         } else {
             runnerDamage = 0;
         }
 
+        // Zombie
         obstacle = new ObstacleEntity(OBSTACLE_POS_X, ZOMBIE_POS_Y,
             ZOMBIE_COLLISION_HEIGHT, ZOMBIE_COLLISION_WIDTH, ZOMBIE_SIZE_HEIGHT, ZOMBIE_SIZE_WIDTH,
             ZOMBIE_SPRITE_PATH, zombieSpeed, runnerDamage); 
@@ -493,11 +440,6 @@ function generateObstacle() {
         // add obstacle to array
         OBSTACLE_ARRAY.push(obstacle);
     }
-}
-
-//for testing
-function setIfLoop() {
-    testing = true;
 }
 
 //increases the player's score
@@ -518,6 +460,76 @@ function mousePressed() {
     }
 }
 
+// pushing images and orders to array
+function pushImagesAndOrders() {
+    // push all images to orderImages array
+    orderImages.push(TACO_1);
+    orderImages.push(TACO_2);
+    orderImages.push(TACO_3);
+    orderImages.push(TACO_4);
+    orderImages.push(TACO_5);
+    orderImages.push(TACO_6);
+    orderImages.push(TACO_7);
+    orderImages.push(TACO_8);
+    orderImages.push(TACO_9);
+    orderImages.push(TACO_10);
+    orderImages.push(TACO_11);
+    orderImages.push(TACO_12);
+    orderImages.push(TACO_13);
+    orderImages.push(TACO_14);
+    orderImages.push(TACO_15);
+    orderImages.push(TACO_16);
+    orderImages.push(TACO_17);
+    orderImages.push(TACO_18);
+    orderImages.push(TACO_19);
+    orderImages.push(TACO_20);
+    orderImages.push(TACO_21);
+    orderImages.push(TACO_22);
+    orderImages.push(TACO_23);
+    orderImages.push(TACO_24);
+    orderImages.push(TACO_25);
+    orderImages.push(TACO_26);
+    orderImages.push(TACO_27);
+    orderImages.push(TACO_28);
+    orderImages.push(TACO_29);
+    orderImages.push(TACO_30);
+    orderImages.push(TACO_31);
+
+    // push all order combos to orderList array
+    orderList.push(["beef"]);
+    orderList.push(["beef", "lettuce"]);
+    orderList.push(["beef", "cheese"]);
+    orderList.push(["beef", "tomato"]);
+    orderList.push(["beef", "sour_cream"]);
+    orderList.push(["beef", "cheese", "lettuce"]);
+    orderList.push(["beef", "cheese", "tomato"]);
+    orderList.push(["beef", "cheese", "sour_cream"]);
+    orderList.push(["beef", "lettuce", "tomato"]);
+    orderList.push(["beef", "lettuce", "sour_cream"]);
+    orderList.push(["beef", "sour_cream", "tomato"]);
+    orderList.push(["beef", "lettuce", "sour_cream", "tomato"]);
+    orderList.push(["beef", "cheese", "sour_cream", "tomato"]);
+    orderList.push(["beef", "cheese", "lettuce", "tomato"]);
+    orderList.push(["beef", "cheese", "lettuce", "sour_cream"]);
+    orderList.push(["beef", "cheese", "lettuce", "sour_cream", "tomato"]);
+    orderList.push(["tomato"]);
+    orderList.push(["lettuce"]);
+    orderList.push(["cheese"]);
+    orderList.push(["sour_cream"]);
+    orderList.push(["cheese", "tomato"]);
+    orderList.push(["cheese", "lettuce"]);
+    orderList.push(["cheese", "sour_cream"]);
+    orderList.push(["cheese", "lettuce", "tomato"]);
+    orderList.push(["cheese", "sour_cream", "tomato"]);
+    orderList.push(["cheese", "lettuce", "sour_cream", "tomato"  ]);
+    orderList.push(["lettuce", "tomato"]);
+    orderList.push(["sour_cream", "tomato" ]);
+    orderList.push(["lettuce", "sour_cream", "tomato"]);
+    orderList.push(["lettuce", "sour_cream"]);
+    orderList.push(["cheese", "lettuce", "sour_cream"]);
+}
+
+// for ingredient tub mouse clicking
 function checkTubCoordinates() {
     // checks if mouse is in tub coordinates and spawn its ingredient
     if (mouseX > CHEESE_TUB_COORDINATES[0] && mouseY > CHEESE_TUB_COORDINATES[1] && mouseX < CHEESE_TUB_COORDINATES[2] && mouseY < CHEESE_TUB_COORDINATES[3]) {
@@ -612,6 +624,7 @@ function getRandomInt(max) {
 
 // generates new order
 function generateOrder() {
+    // get random order number and create it
     chooseOrder = getRandomInt(15);
     order = new TacoOrder(INITIAL_X, INITIAL_Y, orderImages[chooseOrder], orderList[chooseOrder]);
 
@@ -637,16 +650,21 @@ function sortArrayEquals(array1, array2) {
         }
     }
     
+    // return true if all checks pass
     return true;
 }
 
 // shows the current ingredient stack
 function showIngredientStack() { 
+    // check if current ingredient stack is in order list
     for(var i = 0; i < orderList.length; i++) {
         if(sortArrayEquals(currentIngredientStack, orderList[i])) {
+            // create with correct image
             ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], orderImages[i], "stack");
             ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
             ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
+
+            // return ingredient stack
             return ingredientStack;
         }
     }
@@ -654,17 +672,28 @@ function showIngredientStack() {
 
 // resets runner gameplay
 function resetRunner() {
+    // reset obstacle array
     OBSTACLE_ARRAY = [];
 
     // checks for restart of game or gamemode transition
     if(gameState == States.server) {
+        // keeps lives on gamemode transition
         runnerLives = runner.livesAmount;
     } else {
+        // reset lives
         runnerLives = TRUCK_LIVES_AMOUNT;
+
+        // reset spawn times
         MIN_OBSTACLE_SPAWN_TIME = 500;
         MAX_OBSTACLE_SPAWN_TIME = 2000;
+
+        // reset scroll speed
         SCROLL_SPEED = 10;
+
+        // reset last life check
         lastLife = false;
+
+        // reset player score
         playerScore = 0;
     }
 
@@ -682,26 +711,32 @@ function resetRunner() {
 
 // resets server gameplay
 function resetServer() {
-     // generate first order
-     order = generateOrder();
+    // generate first order
+    order = generateOrder();
 
-     // create initial ingredient stack
-     ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
-     ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
-     ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
+    // create initial ingredient stack
+    ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
+    ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
+    ingredientStack.positionArray[1] = ingredientStack.centerArray[1];
+
+    // reset ingredient stack
     currentIngredientStack = [];
 
-     // ingredient declaration
-     ingredient = new Ingredient(0, 0, "server_files/assets/Ground_Beef.png", "beef");
+    // ingredient declaration
+    ingredient = new Ingredient(0, 0, "server_files/assets/Ground_Beef.png", "beef");
 
-     // for showing/hiding on ingredient spawn
-     showIngredient = false;
+    // for showing/hiding on ingredient spawn
+    showIngredient = false;
 }
 
+// reset runner timer
 function resetRunnerTimer() {
+    // set timer to current time + timer length
     currentRunnerTimer = millis() + runnerTimer;
 }
 
+// reset server timer
 function resetServerTimer() {
+    // set timer to current time + timer length
     currentServerTimer = millis() + serverTimer;
 }

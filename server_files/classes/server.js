@@ -1,27 +1,22 @@
 class Ingredient extends Entity {
   constructor (posX, posY, spritePath, name) {
-      super(posX, posY, 100, 100, 100, 100, spritePath, false, true);
+    super(posX, posY, 100, 100, 100, 100, spritePath, false, true);
 
-      // ingredient name
-      this.name = name;
+    // ingredient name
+    this.name = name;
 
-      // time to cook
-      // this.cookingTime = cookingTime;
+    // sprite path for image
+    this.spritePath = spritePath;
 
-      // for cooked checking
-      // this.cooked = false;
-
-        // for checking
-        this.spritePath = spritePath;
-
-      // for dragging
-      this.isDragged = false;
-      this.mouseOffsetX = 0;
-      this.mouseOffsetY = 0;
+    // for dragging
+    this.isDragged = false;
+    this.mouseOffsetX = 0;
+    this.mouseOffsetY = 0;
   }
 
   // displays ingredient
   show() {
+    // show image
     image(this.spriteImage, this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
   }
 
@@ -52,6 +47,7 @@ class Ingredient extends Entity {
   }
 }
 
+// cheese subclass
 class Cheese extends Ingredient {
     constructor(posX, posY) { 
         super(posX, posY, "server_files/assets/Shredded_Cheese_Ver_3.png", "cheese");
@@ -60,33 +56,45 @@ class Cheese extends Ingredient {
     }
 }
 
+// tomato subclass
 class Tomato extends Ingredient {
     constructor(posX, posY) { 
         super(posX, posY, "server_files/assets/Diced_Tomatoes.png", "tomato");
+
+        // set position from center
         this.positionArray[0] = this.centerArray[0];
         this.positionArray[1] = this.centerArray[1];
     }
 }
 
+// beef subclass
 class Beef extends Ingredient {
     constructor(posX, posY) { 
         super(posX, posY, "server_files/assets/Ground_Beef.png", "beef");
+
+        // set position from center
         this.positionArray[0] = this.centerArray[0];
         this.positionArray[1] = this.centerArray[1];
     }
 }
 
+// lettuce subclass
 class Lettuce extends Ingredient {
     constructor(posX, posY) { 
         super(posX, posY, "server_files/assets/Lettuce.png", "lettuce");
+
+        // set position from center
         this.positionArray[0] = this.centerArray[0];
         this.positionArray[1] = this.centerArray[1];
     }
 }
 
+// sour cream subclass
 class SourCream extends Ingredient {
     constructor(posX, posY) { 
         super(posX, posY, "server_files/assets/Sour_Cream.png", "sour_cream");
+
+        // set position from center
         this.positionArray[0] = this.centerArray[0];
         this.positionArray[1] = this.centerArray[1];
     }
@@ -94,60 +102,27 @@ class SourCream extends Ingredient {
 
 class TacoOrder {
     constructor (posX, posY, spritePath, actualOrder) {
-        //the x and y position of our taco image
+        // x and y position of taco image
         this.posX = posX;
         this.posY = posY;
 
-        //the taco image to be displayed
+        // taco image to be displayed
         this.tacoSprite = loadImage(spritePath);
 
-        // sets order completion
+        // order completion
         this.complete = false;
 
-        //the order to be checked against when completeing
+        // order to be checked against when completeing
         this.actualOrder = actualOrder;
     }
 
-    getPosX() { //returns x position of order
-        return this.posX;
-    }
-
-    getPosY() { //returns y position of order
-        return this.posY;
-    }
-
-    show() { //draws the taco
+    // draws the taco
+    show() { 
         image(this.tacoSprite, this.posX - 38, this.posY - 5, 100, 100);
     }
 
-    isComplete(order) { // returns if order is complete
+    // returns if order is complete
+    isComplete(order) {
         return sortArrayEquals(order, this.actualOrder);
     }
-    
-    getActualOrder() { //returns order to be checked
-        return this.actualOrder;
-    }
 }
-
-// define images
-// let tacoShellImg, tacoMeatImg, tomatoImg, cheeseImg, hotSauceImg;
-// let canvasX = 500, canvasY = 500;
-// let interactableArray = [];
-
-// define starting positions of images
-// const startPositions = [
-//   { image: 'tacoShellImg', x: 10, y: 10, width: 50, height: 50, ingredient: Ingredient, cookingTime: -1 },
-//   { image: 'tacoMeatImg', x: 60, y: 10, width: 50, height: 50, ingredient: Ingredient, cookingTime: 3 },
-//   { image: 'tomatoImg', x: 110, y: 10, width: 50, height: 50, ingredient: Ingredient, cookingTime: -1 },
-//   { image: 'cheeseImg', x: 160, y: 10, width: 50, height: 50, ingredient: Ingredient, cookingTime: -1 },
-//   { image: 'hotSauceImg', x: 210, y: 10, width: 50, height: 50, ingredient: Ingredient, cookingTime: -1 }
-// ];
-
-// // define target area for each type of ingredient
-// const targetAreas = [
-//   { image: 'tacoShellImg', x: 300, y: 10 },
-//   { image: 'tacoMeatImg', x: 300, y: 80 },
-//   { image: 'tomatoImg', x: 300, y: 150 },
-//   { image: 'cheeseImg', x: 300, y: 220 },
-//   { image: 'hotSauceImg', x: 300, y: 290 }
-// ];

@@ -1,4 +1,6 @@
-showHitboxes = true;
+// for showing obstacle hitboxes
+showHitboxes = false;
+
 class ObstacleEntity extends Entity {
     constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, scrollSpeed, lifeDamage) {
         super(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, true, false);
@@ -16,29 +18,25 @@ class ObstacleEntity extends Entity {
             console.log("Invalid lifeDamage passed to ObstacleEntity.")
         }
         this.lifeDamage = lifeDamage;
-
+        
+        // for squished checking
         this.squished = false;
     }
 
+    // shows obstacle
     show() {
         // show image
-      
-      image(this.spriteImage, this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
-      //this.positionArray[0] -= this.scrollSpeed;
-      // speed
-      if(showHitboxes) {
-        noFill();
-        rect(this.positionArray[0], this.positionArray[1], this.collisionArray[0], this.collisionArray[1]);
-      }
+        image(this.spriteImage, this.positionArray[0], this.positionArray[1], this.sizeArray[0], this.sizeArray[1]);
+    
+        // for hitbox debugging
+        if(showHitboxes) {
+            noFill();
+            rect(this.positionArray[0], this.positionArray[1], this.collisionArray[0], this.collisionArray[1]);
+        }
 
-      if (this.positionArray[0] + this.sizeArray[0] >= 0) {
-            this.positionArray[0] -= this.scrollSpeed;
-        }//NOTE: THIS IF IS NOT NEEDED. there is no way to delete an object in js, i think, so this is just a pointless check in here for legacy reasons.
-    }
-/*
-    genRandObstacle(OBSTACLE_POS_X, OBSTACLE_POS_Y) {
-      // load sprite image
-      this.spriteImage = loadImage(spritePath);
-    }
-    */
+        // speed of scroll across screen
+        if (this.positionArray[0] + this.sizeArray[0] >= 0) {
+                this.positionArray[0] -= this.scrollSpeed;
+            }
+        }
 }
