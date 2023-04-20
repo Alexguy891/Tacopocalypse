@@ -655,6 +655,8 @@ function showIngredientStack() {
 // resets runner gameplay
 function resetRunner() {
     OBSTACLE_ARRAY = [];
+
+    // checks for restart of game or gamemode transition
     if(gameState == States.server) {
         runnerLives = runner.livesAmount;
     } else {
@@ -662,6 +664,8 @@ function resetRunner() {
         MIN_OBSTACLE_SPAWN_TIME = 500;
         MAX_OBSTACLE_SPAWN_TIME = 2000;
         SCROLL_SPEED = 10;
+        lastLife = false;
+        playerScore = 0;
     }
 
     // create runner
