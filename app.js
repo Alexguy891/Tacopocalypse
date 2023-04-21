@@ -332,7 +332,7 @@ function draw() {
         // displays UI elements
         text("Score: " + playerScore, 10, 20);
         text("Lives: " + runner.livesAmount, 10, 40);
-        text("Time: " + (currentRunnerTimer - millis()) / 1000 + "s", 10, 60);
+        text("Time: " + (Math.round((currentRunnerTimer - millis()) / 1000 * 100) / 100).toFixed(2) + "s", 10, 60);
         
         // generate obstacle after random time
         if(millis() > spawnTimer) {
@@ -411,6 +411,11 @@ function draw() {
         
         // show ingredient stack
         ingredientStack.show();
+
+        // displays UI elements
+        text("Score: " + playerScore, 10, 20);
+        text("Lives: " + runner.livesAmount, 10, 40);
+        text("Time: " + (Math.round((currentServerTimer - millis()) / 1000 * 100) / 100).toFixed(2) + "s", 10, 60);
     }
 }
 
