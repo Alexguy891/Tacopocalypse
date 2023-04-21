@@ -7,8 +7,15 @@ const States = {
     paused: "paused"
 }
 
+// ground y coordinate
+let GROUND_Y = 375;
+
 // game state variables
 var gameState = States.start;
+
+// for scrolling background
+let backgroundX1 = 0;
+let backgroundX2 = 720;
 
 // timers
 // timer lengths
@@ -33,7 +40,7 @@ let TRUCK_SIZE_HEIGHT = 100;
 let TRUCK_SIZE_WIDTH = 100;
 let TRUCK_SPRITE_PATH = "runner_files/assets/Food_Truck.png"
 let TRUCK_LIVES_AMOUNT = 4;
-let TRUCK_POS_Y = 400 - 60;
+let TRUCK_POS_Y = GROUND_Y - 60;
 
 // runner constants
 let RUNNER_POS_X = 100;
@@ -43,7 +50,7 @@ let RUNNER_SIZE_HEIGHT = 30;
 let RUNNER_SIZE_WIDTH = 30;
 let RUNNER_SPRITE_PATH = "runner_files/assets/runner.png"
 let RUNNER_LIVES_AMOUNT = 1;
-let RUNNER_POS_Y = 400 - 30;
+let RUNNER_POS_Y = GROUND_Y - 30;
 
 // obstacle position spawn constants
 let OBSTACLE_POS_X = 720;
@@ -57,7 +64,7 @@ let minZombieSpeed = 5;
 let maxZombieSpeed = 15;
 
 // rubble obstacle constants
-let RUBBLE_POS_Y = 400 - 28;
+let RUBBLE_POS_Y = GROUND_Y - 28;
 let RUBBLE_COLLISION_HEIGHT = 48;
 let RUBBLE_COLLISION_WIDTH = 40;
 let RUBBLE_SIZE_HEIGHT = 80;
@@ -65,7 +72,7 @@ let RUBBLE_SIZE_WIDTH = 80;
 let RUBBLE_SPRITE_PATH = "runner_files/assets/Rubble.png";
 
 // wall obstacle constants
-let WALL_POS_Y = 400 - 40;
+let WALL_POS_Y = GROUND_Y - 40;
 let WALL_COLLISION_HEIGHT = 15;
 let WALL_COLLISION_WIDTH = 40;
 let WALL_SIZE_HEIGHT = 60;
@@ -73,7 +80,7 @@ let WALL_SIZE_WIDTH = 65;
 let WALL_SPRITE_PATH = "runner_files/assets/Wall_Obstacle_v3.png";
 
 // spike pad obstacle constants
-let SPIKEPAD_POS_Y = 400 - 28;
+let SPIKEPAD_POS_Y = GROUND_Y - 28;
 let SPIKEPAD_COLLISION_HEIGHT = 53;
 let SPIKEPAD_COLLISION_WIDTH = 60;
 let SPIKEPAD_SIZE_HEIGHT = 100;
@@ -81,7 +88,7 @@ let SPIKEPAD_SIZE_WIDTH = 100;
 let SPIKEPAD_SPRITE_PATH = "runner_files/assets/Spike_Pad_Obstacle.png";
 
 // zombie obstacle constants
-let ZOMBIE_POS_Y = 400 - 30;
+let ZOMBIE_POS_Y = GROUND_Y - 30;
 let ZOMBIE_COLLISION_HEIGHT = 20;
 let ZOMBIE_COLLISION_WIDTH = 60;
 let ZOMBIE_SIZE_HEIGHT = 60;
@@ -90,7 +97,7 @@ let ZOMBIE_SPRITE_PATH = "runner_files/assets/Zombie_Obstacle.png";
 let ZOMBIE_SPEED = 7;
 
 // squished zombie constants
-let SQUISHED_POS_Y = 400 - 5;
+let SQUISHED_POS_Y = GROUND_Y - 20;
 let SQUISHED_COLLISION_HEIGHT = 20;
 let SQUISHED_COLLISION_WIDTH = 5;
 let SQUISHED_SIZE_HEIGHT = 60;
@@ -210,6 +217,10 @@ function setup() {
     gameOverScreen = loadImage("menus/assets/game_over.png");
     gameOverScreenHighlight = loadImage("menus/assets/game_over_highlight.png");
 
+    // load runner background image
+    runnerBackground = loadImage("runner_files/assets/runner_background.png");
+    runnerBackgroundScroll = loadImage("runner_files/assets/runner_background_top.png");
+
     // ingredient declaration
     ingredient = new Ingredient(0, 0, "server_files/assets/Ground_Beef.png", "beef");
 
@@ -251,6 +262,27 @@ function draw() {
 
     // check if game is in runner state
     if(gameState == States.runner) {
+        background(200);
+
+        // show runner road
+        image(runnerBackground, 0, 0);
+
+        // show runner background
+        image(runnerBackgroundScroll, backgroundX1, 0);
+        image(runnerBackgroundScroll, backgroundX2, 0);
+
+        // background scrolling
+        backgroundX1 -= SCROLL_SPEED;
+        backgroundX2 -= SCROLL_SPEED;
+
+        // reset widths if background passed left side of screen
+        if(backgroundX1 <= -720) {
+            backgroundX1 = 720;
+        }
+        if(backgroundX2 <= -720) {
+            backgroundX2 = 720;
+        }
+
         // show chef if on lastlife
         if(runner.livesAmount == 1 && !lastLife) {
             // prevent repeated creation
@@ -290,9 +322,6 @@ function draw() {
                 MIN_OBSTACLE_SPAWN_TIME -= 100;
             }
         }
-
-        // draw background
-        background(220);
 
         // display runner
         runner.show();
@@ -674,6 +703,10 @@ function showIngredientStack() {
 function resetRunner() {
     // reset obstacle array
     OBSTACLE_ARRAY = [];
+
+    // reset background scroll
+    backgroundX1 = 0;
+    backgroundX2 = 720;
 
     // checks for restart of game or gamemode transition
     if(gameState == States.server) {

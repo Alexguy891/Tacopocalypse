@@ -5,7 +5,10 @@ var hitResetTimer = 2000;
 var currentResetTimer = -1;
 
 // for showing runner hitboxes
-showHitboxes = true;
+showHitboxes = false;
+
+// ground y coordinate
+var groundY = 375;
 
 class RunnerEntity extends Entity {
     constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, livesAmount) {
@@ -63,7 +66,7 @@ class RunnerEntity extends Entity {
       }
         
       // fall with gravity if above ground
-      if(this.positionArray[1] + this.collisionArray[1] < height) {
+      if(this.positionArray[1] + this.collisionArray[1] < groundY) {
         this.positionArray[1] += this.gravity;
       }  
       
@@ -72,7 +75,7 @@ class RunnerEntity extends Entity {
       this.velocity /= 1.2;
       
       // spacebar jump
-      if(keyIsDown(32) && this.positionArray[1] + this.collisionArray[1] >= height) {
+      if(keyIsDown(32) && this.positionArray[1] + this.collisionArray[1] >= groundY) {
         // increase upwards velocity
         this.velocity = -50;
 
