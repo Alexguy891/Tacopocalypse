@@ -287,6 +287,9 @@ function draw() {
         if(runner.livesAmount == 1 && !lastLife) {
             // prevent repeated creation
             lastLife = true;
+            
+            // run slower on last life
+            SCROLL_SPEED /= 2;
 
             // create chef
             runner = new RunnerEntity(RUNNER_POS_X, RUNNER_POS_Y, RUNNER_COLLISION_HEIGHT, 
