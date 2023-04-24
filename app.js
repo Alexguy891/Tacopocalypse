@@ -495,6 +495,13 @@ function mousePressed() {
         checkTubCoordinates();
         ingredient.clicked();
     }
+
+    if(gameState == States.runner) {
+        if(runner.positionArray[1] + runner.collisionArray[1] >= GROUND_Y) {
+            // increase upwards velocity
+            runner.velocity = -50;
+        }
+    }
 }
 
 // pushing images and orders to array
