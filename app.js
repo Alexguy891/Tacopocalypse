@@ -4,7 +4,8 @@ const States = {
     server: "server",
     start: "start",
     gameover: "gameover",
-    paused: "paused"
+    paused: "paused",
+    instructions: "instructions"
 }
 
 // ground y coordinate
@@ -28,6 +29,10 @@ var currentServerTimer = serverTimer;
 // start menu button coordinates
 let START_BUTTON_COORDINATES = [175, 231, 527, 290];
 let INSTRUCTIONS_BUTTON_COORDINATES = [575, 7, 679, 41];
+
+// instruction menu button coordinates
+let INSTRUCTION_START_BUTTON_COORDINATES = [591, 101, 657, 249];
+let INSTRUCTION_RETURN_BUTTON_COORDINATES = [38, 102, 122, 249];
 
 // game over menu button coordinates
 let RESTART_BUTTON_COORDINATES = [161, 230, 536, 290];
@@ -213,6 +218,11 @@ function setup() {
     startScreenStartHighlight = loadImage("menus/assets/main_menu_start_highlight.png");
     startScreenInstructionsHighlight = loadImage("menus/assets/main_menu_instruct_highlight.png");
 
+    // load instruction menu images
+    instructionScreen = loadImage("menus/assets/instruction_menu.png");
+    instructionScreenStartHightlight = loadImage("menus/assets/instruction_menu_start_highlight.png");
+    instructionScreenReturnHighlight = loadImage("menus/assets/instruction_menu_return_highlight.png");
+    
     // load gameover screen image
     gameOverScreen = loadImage("menus/assets/game_over.png");
     gameOverScreenHighlight = loadImage("menus/assets/game_over_highlight.png");
@@ -233,6 +243,8 @@ function setup() {
 
 
 function draw() {
+    console.log(mouseX + ", " + mouseY);
+
     // check if game is in start state
     if(gameState == States.start) {
         // show start screen
@@ -246,6 +258,22 @@ function draw() {
         // highlight instructions button if mouse over it
         if(mouseX > INSTRUCTIONS_BUTTON_COORDINATES[0] && mouseY > INSTRUCTIONS_BUTTON_COORDINATES[1] && mouseX < INSTRUCTIONS_BUTTON_COORDINATES[2] && mouseY < INSTRUCTIONS_BUTTON_COORDINATES[3]) {
             image(startScreenInstructionsHighlight, 0, 0, 720, 400);
+        }
+    }
+
+    // check if game is in instructions state
+    if(gameState == States.instructions) {
+        // show instruction screen
+        image(instructionScreen, 0, 0, 720, 400);
+
+        // highlight return button if mouse over it
+        if(mouseX > INSTRUCTION_RETURN_BUTTON_COORDINATES[0] && mouseY > INSTRUCTION_RETURN_BUTTON_COORDINATES[1] && mouseX < INSTRUCTION_RETURN_BUTTON_COORDINATES[2] && mouseY < INSTRUCTION_RETURN_BUTTON_COORDINATES[3]) {
+            image(instructionScreenReturnHighlight, 0, 0, 720, 400);
+        }
+
+        // highlight start button if mouse over it
+        if(mouseX > INSTRUCTION_START_BUTTON_COORDINATES[0] && mouseY > INSTRUCTION_START_BUTTON_COORDINATES[1] && mouseX < INSTRUCTION_START_BUTTON_COORDINATES[2] && mouseY < INSTRUCTION_START_BUTTON_COORDINATES[3]) {
+            image(instructionScreenStartHightlight, 0, 0, 720, 400);
         }
     }
 
@@ -629,9 +657,37 @@ function mouseReleased() {
     ingredient.release();
     ingredientStack.release();
 
-    // checks if mouse on start button and game is in start state
+    // checks if game is in start state
     if(gameState == States.start) { 
+        // checks if mouse on start button
         if(mouseX > START_BUTTON_COORDINATES[0] && mouseY > START_BUTTON_COORDINATES[1] && mouseX < START_BUTTON_COORDINATES[2] && mouseY < START_BUTTON_COORDINATES[3]) {
+            // reset runner
+            resetRunner();
+            
+            // change game state to runner
+            gameState = States.runner;
+
+            // reset runner timer
+            resetRunnerTimer();
+        }
+
+        // checks if mouse on instructions button
+        if(mouseX > INSTRUCTIONS_BUTTON_COORDINATES[0] && mouseY > INSTRUCTIONS_BUTTON_COORDINATES[1] && mouseX < INSTRUCTIONS_BUTTON_COORDINATES[2] && mouseY < INSTRUCTIONS_BUTTON_COORDINATES[3]) {
+            // change game state to instructions
+            gameState = States.instructions;
+        }
+    }
+
+    // checks if game is in instructions state
+    if(gameState == States.instructions) {
+        // checks if mouse on return button
+        if(mouseX > INSTRUCTION_RETURN_BUTTON_COORDINATES[0] && mouseY > INSTRUCTION_RETURN_BUTTON_COORDINATES[1] && mouseX < INSTRUCTION_RETURN_BUTTON_COORDINATES[2] && mouseY < INSTRUCTION_RETURN_BUTTON_COORDINATES[3]) {
+            // change game state to start
+            gameState = States.start;
+        }
+
+        // checks if mouse on start button
+        if(mouseX > INSTRUCTION_START_BUTTON_COORDINATES[0] && mouseY > INSTRUCTION_START_BUTTON_COORDINATES[1] && mouseX < INSTRUCTION_START_BUTTON_COORDINATES[2] && mouseY < INSTRUCTION_START_BUTTON_COORDINATES[3]) {
             // reset runner
             resetRunner();
             
