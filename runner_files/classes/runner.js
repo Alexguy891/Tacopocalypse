@@ -9,6 +9,7 @@ showHitboxes = false;
 
 // ground y coordinate
 var groundY = 375;
+var lastSquish = 0;
 
 class RunnerEntity extends Entity {
     constructor(posX, posY, collisionHeight, collisionWidth, sizeHeight, sizeWidth, spritePath, livesAmount) {
@@ -45,7 +46,14 @@ class RunnerEntity extends Entity {
             }
           } else {
             // if object doesn't deal damage, squish it
-            ObstacleEntity.squished = true;
+            
+            if(lastSquish <= second() - 1){
+              playerScore += 25; //get 25 points for killing zombie;
+              ObstacleEntity.squished = true;
+              lastSquish = second();
+              //console.log(currentRunnerTimer)
+            }
+            
           }
       }  
       

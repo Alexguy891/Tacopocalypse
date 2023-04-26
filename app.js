@@ -243,7 +243,7 @@ function setup() {
 
 
 function draw() {
-    console.log(mouseX + ", " + mouseY);
+    //console.log(mouseX + ", " + mouseY);
 
     // check if game is in start state
     if(gameState == States.start) {
@@ -279,13 +279,24 @@ function draw() {
 
     // check if game is in gameover state
     if(gameState == States.gameover) {
+        textSize(70)
+        stroke(10, 100,10);
+        fill(101, 67, 33);
+        strokeWeight(2);
         // show gameover screen
+        
         image(gameOverScreen, 0, 0, 720, 400);
-
+        
+        
         // highlight restart button if mouse over it
         if(mouseX > RESTART_BUTTON_COORDINATES[0] && mouseY > RESTART_BUTTON_COORDINATES[1] && mouseX < RESTART_BUTTON_COORDINATES[2] && mouseY < RESTART_BUTTON_COORDINATES[3]) {
             image(gameOverScreenHighlight, 0, 0, 720, 400);
         }
+        text("Score: " + playerScore, 220, 100);
+        stroke(0,0,0);
+        strokeWeight(0);
+        textSize(11);
+        fill(0,0,0);
     }
 
     // check if game is in runner state
