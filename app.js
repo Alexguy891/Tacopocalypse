@@ -22,6 +22,7 @@ let backgroundX2 = 720;
 // timer lengths
 let runnerTimer = 20000; 
 let serverTimer = 15000; 
+
 // current timers
 var currentRunnerTimer = runnerTimer; 
 var currentServerTimer = serverTimer;
@@ -43,7 +44,8 @@ let TRUCK_COLLISION_HEIGHT = 70;
 let TRUCK_COLLISION_WIDTH = 60;
 let TRUCK_SIZE_HEIGHT = 100;
 let TRUCK_SIZE_WIDTH = 100;
-let TRUCK_SPRITE_PATH = "runner_files/assets/Food_Truck.png"
+let TRUCK_SPRITE_PATH = "runner_files/assets/Food_Truck.png";
+let HIT_TRUCK_SPRITE_PATH = "runner_files/assets/Hit_Food_Truck.png";
 let TRUCK_LIVES_AMOUNT = 4;
 let TRUCK_POS_Y = GROUND_Y - 60;
 
@@ -239,6 +241,10 @@ function setup() {
 
     // for preventing repeated runner creation
     lastLife = false;
+
+    // for flashing effect
+    damagedTruck = loadImage("runner_files/assets/Hit_Food_Truck.png");
+    startingTruck = loadImage("runner_files/assets/Food_Truck.png");
 }       
 
 
@@ -404,6 +410,7 @@ function draw() {
                 OBSTACLE_ARRAY.splice(i, 1);
             }
         }
+        runner.resetImage();
     } 
     
     // check if game is in server state

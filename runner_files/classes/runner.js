@@ -24,6 +24,17 @@ class RunnerEntity extends Entity {
         // for jumping
         this.velocity = 0;
         this.gravity = 12;
+
+    }
+
+    // Used to change food truck to darker version after taking damage
+    // Changes back to original version after invincibility period (currentResetTimer)
+    resetImage() {
+      if (this.livesAmount > 1 && this.livesAmount < 4 && currentResetTimer > millis()) { // this.livesAmount < 4 because 4 is currently max life, prevents starting in this mode
+        this.spriteImage = damagedTruck;
+      } else if (this.livesAmount > 1 && currentResetTimer < millis()){
+        this.spriteImage = startingTruck;
+      }
     }
 
     // loss of lives
@@ -40,11 +51,11 @@ class RunnerEntity extends Entity {
             if(millis() > currentResetTimer) {
               // reduce lives by damage amount
               this.livesAmount -= ObstacleEntity.lifeDamage;
-
               // reset timer
               currentResetTimer = millis() + hitResetTimer;
             }
           } else {
+
             // if object doesn't deal damage, squish it
             
             if(lastSquish <= second() - 1){
@@ -62,6 +73,7 @@ class RunnerEntity extends Entity {
           this.dead = true;
       }
     }
+
     
     show() {
       // show image
