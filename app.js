@@ -22,7 +22,7 @@ let backgroundX2 = 720;
 
 // timers
 // timer lengths
-let runnerTimer = 10000; 
+let runnerTimer = 20000; 
 let serverTimer = 15000; 
 
 // current timers
@@ -216,9 +216,9 @@ function setup() {
     // push images and orders to arrays
     pushImagesAndOrders();
     textSize(15);
-        stroke(10, 100,10);
+        stroke(255);
         fill(101, 67, 33);
-        strokeWeight(2);
+        strokeWeight(1);
     // create runner
     runner = new RunnerEntity(TRUCK_START_X, TRUCK_POS_Y, TRUCK_COLLISION_HEIGHT, 
         TRUCK_COLLISION_WIDTH, TRUCK_SIZE_HEIGHT,
