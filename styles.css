@@ -1,8 +1,33 @@
 html, body {
-    margin: 0;
-    padding: 0;
+    height: 100%;
+    background-image: url('menus/assets/tileBackground.jpg');
+    background-repeat: repeat;
 }
+
+body {
+    margin: 0;
+    display: flex;
+  
+    /* This centers our sketch horizontally. */
+    justify-content: center;
+  
+    /* This centers our sketch vertically. */
+    align-items: center;
+}
+
+/* h1 {
+    color: darkgoldenrod;
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 50nm;
+} */
+
 canvas {
     display: block;
 }
+
+
   
