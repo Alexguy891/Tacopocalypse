@@ -198,7 +198,10 @@ function setup() {
 
     // push images and orders to arrays
     pushImagesAndOrders();
-
+    textSize(15);
+        stroke(10, 100,10);
+        fill(101, 67, 33);
+        strokeWeight(2);
     // create runner
     runner = new RunnerEntity(TRUCK_POS_X, TRUCK_POS_Y, TRUCK_COLLISION_HEIGHT, 
         TRUCK_COLLISION_WIDTH, TRUCK_SIZE_HEIGHT,
@@ -299,10 +302,7 @@ function draw() {
             image(gameOverScreenHighlight, 0, 0, 720, 400);
         }
         text("Score: " + playerScore, 220, 100);
-        stroke(0,0,0);
-        strokeWeight(0);
-        textSize(11);
-        fill(0,0,0);
+        textSize(15);
     }
 
     // check if game is in runner state

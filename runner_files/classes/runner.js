@@ -57,11 +57,11 @@ class RunnerEntity extends Entity {
           } else {
 
             // if object doesn't deal damage, squish it
-            
-            if(lastSquish <= second() - 1){
+            //ObstacleEntity.squished = true;
+            if(lastSquish <= second() + minute() * 100 - 1){
               playerScore += 25; //get 25 points for killing zombie;
               ObstacleEntity.squished = true;
-              lastSquish = second();
+              lastSquish = second() + minute() * 100;
               //console.log(currentRunnerTimer)
             }
             
