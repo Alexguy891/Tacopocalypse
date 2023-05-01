@@ -1,8 +1,10 @@
 // length of time between hits
 var hitResetTimer = 2000;
+var squishResetTimer = 1000;
 
 // for current hit timer
 var currentResetTimer = -1;
+var currentSquishTimer = -1;
 
 // for showing runner hitboxes
 showHitboxes = false;
@@ -45,6 +47,8 @@ class RunnerEntity extends Entity {
         (this.positionArray[0] <= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[0] &&
         this.positionArray[0] + this.collisionArray[1] >= ObstacleEntity.positionArray[0] + ObstacleEntity.collisionArray[1])) && 
         this.positionArray[1] + this.collisionArray[1] >= ObstacleEntity.positionArray[1]) {
+          console.log(ObstacleEntity.lifeDamage);
+
           // check if obstacle deals damage
           if(ObstacleEntity.lifeDamage > 0) {
             // check if hit reset timer has passed
@@ -54,17 +58,14 @@ class RunnerEntity extends Entity {
               // reset timer
               currentResetTimer = millis() + hitResetTimer;
             }
-          } else {
-
+          } else if(ObstacleEntity.lifeDamage == 0){
             // if object doesn't deal damage, squish it
-            
-            if(lastSquish <= second() - 1){
+            if(millis() > currentSquishTimer){
               playerScore += 25; //get 25 points for killing zombie;
               ObstacleEntity.squished = true;
-              lastSquish = second();
+              currentSquishTimer = millis() + squishResetTimer;
               //console.log(currentRunnerTimer)
             }
-            
           }
       }  
       

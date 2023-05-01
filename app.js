@@ -5,7 +5,9 @@ const States = {
     start: "start",
     gameover: "gameover",
     paused: "paused",
-    instructions: "instructions"
+    instructions: "instructions",
+    transitionToRunner: "transitionToRunner",
+    transitionToServer: "transitionToServer"
 }
 
 // ground y coordinate
@@ -111,11 +113,24 @@ let SQUISHED_SIZE_HEIGHT = 60;
 let SQUISHED_SIZE_WIDTH = 60;
 let SQUISHED_SPRITE_PATH = "runner_files/assets/Squished_Zombie.png";
 
+// spike pad obstacle constants
+let CROWD_POS_Y = GROUND_Y - 80;
+let CROWD_COLLISION_HEIGHT = 0;
+let CROWD_COLLISION_WIDTH = 1000;
+let CROWD_SIZE_HEIGHT = 100;
+let CROWD_SIZE_WIDTH = 100;
+let CROWD_SPRITE_PATH = "runner_files/assets/crowd.png";
+let CROWD_TRUCK_DAMAGE = -1;
+let CROWD_SCROLL_SPEED = 5;
+
 // obstacle object array
 let OBSTACLE_ARRAY = [];
 
 // spawn timer for obstacles
 let spawnTimer = 0;
+
+// for crowd spawning
+let crowdSpawned = false;
 
 // ingredient tub constants
 CHEESE_TUB_COORDINATES = [15, 261, 106, 301];
@@ -207,6 +222,11 @@ function setup() {
     // generate first order
     order = generateOrder();
 
+    // generate crowd obstacle
+    crowdObstacle = new ObstacleEntity(OBSTACLE_POS_X, SPIKEPAD_POS_Y,
+        SPIKEPAD_COLLISION_HEIGHT, SPIKEPAD_COLLISION_WIDTH, SPIKEPAD_SIZE_HEIGHT, SPIKEPAD_SIZE_WIDTH,
+        SPIKEPAD_SPRITE_PATH, CROWD_SCROLL_SPEED, CROWD_TRUCK_DAMAGE); 
+
     // create initial ingredient stack
     ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
     ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
@@ -249,7 +269,7 @@ function setup() {
 
 
 function draw() {
-    //console.log(mouseX + ", " + mouseY);
+    console.log(gameState); 
 
     // check if game is in start state
     if(gameState == States.start) {
@@ -350,24 +370,47 @@ function draw() {
 
         // switch to server state if runner timer ends
         if(millis() > currentRunnerTimer) {
-            // reset server
-            resetServer();
+            // transition state
+            // generate obstacle after random time
+            if(millis() > spawnTimer ) {
+                if(!crowdSpawned) {
+                    if(OBSTACLE_ARRAY.length == 0) {
+                        crowdObstacle = new ObstacleEntity(OBSTACLE_POS_X, CROWD_POS_Y,
+                            CROWD_COLLISION_HEIGHT, CROWD_COLLISION_WIDTH, CROWD_SIZE_HEIGHT, CROWD_SIZE_WIDTH,
+                            CROWD_SPRITE_PATH, CROWD_SCROLL_SPEED, CROWD_TRUCK_DAMAGE); 
+                        crowdSpawned = true;
+                        OBSTACLE_ARRAY.push(crowdObstacle);
+                    }
+                }
+            }
+            
+            if(runner.positionArray[0] >= crowdObstacle.positionArray[0] && crowdSpawned) {
+                // reset server
+                resetServer();
+                
+                // start server timer
+                resetServerTimer();
 
-            // switch to server state
-            gameState = States.server;
+                // increase obstacle speeds
+                SCROLL_SPEED += 1;
+                minZombieSpeed += 1;
+                maxZombieSpeed += 1;
 
-            // start server timer
-            resetServerTimer();
+                // increase spawn time
+                if(MAX_OBSTACLE_SPAWN_TIME > 200 && MIN_OBSTACLE_SPAWN_TIME > 100) {
+                    MAX_OBSTACLE_SPAWN_TIME -= 200;
+                    MIN_OBSTACLE_SPAWN_TIME -= 100;
+                }
 
-            // increase obstacle speeds
-            SCROLL_SPEED += 1;
-            minZombieSpeed += 1;
-            maxZombieSpeed += 1;
-
-            // increase spawn time
-            if(MAX_OBSTACLE_SPAWN_TIME > 200 && MIN_OBSTACLE_SPAWN_TIME > 100) {
-                MAX_OBSTACLE_SPAWN_TIME -= 200;
-                MIN_OBSTACLE_SPAWN_TIME -= 100;
+                // switch to server state
+                gameState = States.server;
+            }
+        } else {
+            // generate obstacle after random time
+            if(millis() > spawnTimer ) {
+                generateObstacle();
+                waitTime = random(MIN_OBSTACLE_SPAWN_TIME, MAX_OBSTACLE_SPAWN_TIME);
+                spawnTimer = millis() + waitTime;
             }
         }
 
@@ -378,13 +421,6 @@ function draw() {
         text("Score: " + playerScore, 10, 20);
         text("Lives: " + runner.livesAmount, 10, 40);
         text("Time: " + (Math.round((currentRunnerTimer - millis()) / 1000 * 100) / 100).toFixed(2) + "s", 10, 60);
-        
-        // generate obstacle after random time
-        if(millis() > spawnTimer) {
-            generateObstacle();
-            waitTime = random(MIN_OBSTACLE_SPAWN_TIME, MAX_OBSTACLE_SPAWN_TIME);
-            spawnTimer = millis() + waitTime;
-        }
 
         // show obstacles
         for (let i = 0; i < OBSTACLE_ARRAY.length; i++) {
@@ -412,7 +448,7 @@ function draw() {
         }
         runner.resetImage();
     } 
-    
+
     // check if game is in server state
     if(gameState == States.server) {
         // switch to runner state if server timer ends
@@ -793,9 +829,12 @@ function resetRunner() {
     // reset obstacle array
     OBSTACLE_ARRAY = [];
 
-    // reset background scroll
-    backgroundX1 = 0;
-    backgroundX2 = 720;
+    // // reset background scroll
+    // backgroundX1 = 0;
+    // backgroundX2 = 720;
+
+    // reset crowd spawning
+    crowdSpawned = false;
 
     // checks for restart of game or gamemode transition
     if(gameState == States.server) {
