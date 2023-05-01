@@ -23,7 +23,7 @@ let backgroundX2 = 720;
 // timers
 // timer lengths
 let runnerTimer = 20000; 
-let serverTimer = 15000; 
+let serverTimer = 15000;
 
 // current timers
 var currentRunnerTimer = runnerTimer; 
@@ -46,7 +46,7 @@ let TRUCK_COLLISION_HEIGHT = 70;
 let TRUCK_COLLISION_WIDTH = 60;
 let TRUCK_SIZE_HEIGHT = 100;
 let TRUCK_SIZE_WIDTH = 100;
-let TRUCK_START_X = -200;
+let TRUCK_START_X = -3000;
 let TRUCK_SPRITE_PATH = "runner_files/assets/Food_Truck.png";
 let HIT_TRUCK_SPRITE_PATH = "runner_files/assets/Hit_Food_Truck.png";
 let TRUCK_LIVES_AMOUNT = 4;
@@ -134,6 +134,15 @@ let spawnTimer = 0;
 // for crowd spawning
 let crowdSpawned = false;
 
+// for transition screens
+let transitionToRunner = false;
+let transitionToServer = false;
+let loopCount = 0;
+let transitionTimer = 5000;
+let currentTransitionTimer = 0;
+let timerStarted = false;
+let resetTimer = false;
+
 // ingredient tub constants
 CHEESE_TUB_COORDINATES = [15, 261, 106, 301];
 TOMATO_TUB_COORDINATES = [127, 261, 218, 301];
@@ -215,10 +224,7 @@ function setup() {
 
     // push images and orders to arrays
     pushImagesAndOrders();
-    textSize(15);
-        stroke(255);
-        fill(101, 67, 33);
-        strokeWeight(1);
+
     // create runner
     runner = new RunnerEntity(TRUCK_START_X, TRUCK_POS_Y, TRUCK_COLLISION_HEIGHT, 
         TRUCK_COLLISION_WIDTH, TRUCK_SIZE_HEIGHT,
@@ -257,6 +263,10 @@ function setup() {
     // load runner background image
     runnerBackground = loadImage("runner_files/assets/runner_background.png");
     runnerBackgroundScroll = loadImage("runner_files/assets/runner_background_top.png");
+
+    // load transition screens
+    runnerToServerScreen = loadImage("menus/assets/runnertoserver.png");
+    serverToRunnerScreen = loadImage("menus/assets/servertorunner.png");
 
     // ingredient declaration
     ingredient = new Ingredient(0, 0, "server_files/assets/Ground_Beef.png", "beef");
@@ -327,7 +337,17 @@ function draw() {
 
     // check if game is in runner state
     if(gameState == States.runner) {
+        textSize(15);
+        stroke(255);
+        fill(101, 67, 33);
+        strokeWeight(1);
+
         if(runner.positionArray[0] < RUNNER_POS_X) {
+            if(runner.positionArray[0] < -20 && loopCount < 1) {
+                showTransitionToRunner = true;
+            } else {
+                showTransitionToRunner = false;
+            }
             runner.positionArray[0] += 10;
         } else {
             if(!crowdSpawned) {
@@ -407,7 +427,6 @@ function draw() {
         // show runner background
         image(runnerBackgroundScroll, backgroundX1, 0);
         image(runnerBackgroundScroll, backgroundX2, 0);
-
         
         
 
@@ -463,10 +482,39 @@ function draw() {
             }
         }
         runner.resetImage();
+
+        if(showTransitionToRunner) {
+            image(serverToRunnerScreen, 0, 0, 720, 400);
+        }
     } 
 
     // check if game is in server state
     if(gameState == States.server) {
+        textSize(15);
+        stroke(255);
+        fill(101, 67, 33);
+        strokeWeight(1);
+        
+        if(loopCount < 1 && !timerStarted) {
+            timerStarted = true;
+            currentTransitionTimer = millis() + transitionTimer;
+            currentServerTimer += currentTransitionTimer
+        } else if(loopCount >= 1) {
+            currentTransitionTimer = 0;
+        }
+
+        // show transition screen
+        if(millis() > currentTransitionTimer) {
+            if(loopCount < 1 && !resetTimer) {
+                resetTimer = true;
+                resetServerTimer();
+            }
+
+            showTransitionToServer = false;
+        } else {
+            showTransitionToServer = true;
+        } 
+
         // switch to runner state if server timer ends
         if(millis() > currentServerTimer) {
             // reset runner
@@ -479,23 +527,19 @@ function draw() {
             resetRunnerTimer();
         }
 
-        // draw background
-        background(220);
+         // draw background
+         background(220);
 
-        // show window art image
-        image(windowArt, 0, 0, 720, 400);
+         // show window art image
+         image(windowArt, 0, 0, 720, 400);
 
-        // show ingredient if spawned
-        if(showIngredient) {
-            ingredient.show();
-        }
+         // show ingredient if spawned
+         if(showIngredient) {
+             ingredient.show();
+         }
 
-        // update if being dragged
-        ingredient.update();
-        ingredientStack.update();
-
-        // generate order after previous order is complete
-        if(order.isComplete(currentIngredientStack)) {
+         // generate order after previous order is complete
+         if(order.isComplete(currentIngredientStack)) {
             order = generateOrder();
             ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
             ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
@@ -504,16 +548,24 @@ function draw() {
             increaseScore(100);
         }
 
-        // show order
-        order.show();
-        
-        // show ingredient stack
-        ingredientStack.show();
+        if(!showTransitionToServer) {
+            // update if being dragged
+            ingredient.update();
+            ingredientStack.update();
 
-        // displays UI elements
-        text("Score: " + playerScore, 10, 20);
-        text("Lives: " + runner.livesAmount, 10, 40);
-        text("Time: " + (Math.round((currentServerTimer - millis()) / 1000 * 100) / 100).toFixed(2) + "s", 330, 140);
+            // show order
+            order.show();
+            
+            // show ingredient stack
+            ingredientStack.show();
+
+            // displays UI elements
+            text("Score: " + playerScore, 10, 20);
+            text("Lives: " + runner.livesAmount, 10, 40);
+            text("Time: " + (Math.round((currentServerTimer - millis()) / 1000 * 100) / 100).toFixed(2) + "s", 330, 140);
+        } else {
+            image(runnerToServerScreen, 0, 0, 720, 400);
+        }
     }
 }
 
@@ -857,7 +909,21 @@ function resetRunner() {
     if(gameState == States.server) {
         // keeps lives on gamemode transition
         runnerLives = runner.livesAmount;
+        
+        // increase loop count
+        loopCount++;
+
+        // reset runner start position
+        if(loopCount >= 1) {
+            TRUCK_START_X = -100
+        }
     } else {
+        // reset loop count
+        loopCount = 0;
+        
+        // reset runner start position
+        TRUCK_START_X = -3000
+
         // reset lives
         runnerLives = TRUCK_LIVES_AMOUNT;
 
@@ -891,6 +957,10 @@ function resetRunner() {
 function resetServer() {
     // generate first order
     order = generateOrder();
+
+    // for timers
+    timerStarted = false;
+    resetTimer = false;
 
     // create initial ingredient stack
     ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
