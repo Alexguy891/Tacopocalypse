@@ -371,10 +371,10 @@ function draw() {
                 
                 // reset widths if background passed left side of screen
                 if(backgroundX1 <= -720) {
-                    backgroundX1 = 720;
+                    backgroundX1 = backgroundX2 + width;
                 }
                 if(backgroundX2 <= -720) {
-                    backgroundX2 = 720;
+                    backgroundX2 = backgroundX1 + width;
                 }
             }
 
@@ -441,8 +441,8 @@ function draw() {
         image(runnerBackground, 0, 0);
 
         // show runner background
-        image(runnerBackgroundScroll, backgroundX1, 0);
-        image(runnerBackgroundScroll, backgroundX2, 0);
+        image(runnerBackgroundScroll, backgroundX1, 0, 722);
+        image(runnerBackgroundScroll, backgroundX2, 0, 722);
         
         
 
