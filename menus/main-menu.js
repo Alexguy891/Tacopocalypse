@@ -28,7 +28,7 @@ function draw() {
   background(220);
   image(menuImg, 0, 0, width, height); 
   } else if (gameState === "game") { goToGame(); } 
-    else if (gameState === "options") { goToOptions(); }
+    else if (gameState === "options") { goToOptions(); ;}
 }
 
 function keyPressed() {
@@ -36,6 +36,8 @@ function keyPressed() {
   if(gameState === "menu") {
   if (keyCode === 32) {
     gameState = "game";
+    //s_menu_select.play();
+    s_runner_theme.play();
     }
   }
 }
@@ -46,10 +48,12 @@ function goToGame() {
     textSize(20);
     textAlign(CENTER, CENTER);
     text("Game in progress...", width/2, height/2);
+    
 }
 
 function goToOptions() {
   // Go to the options menu
+  //s_menu_select.play();
   console.log('Going to Options');
   gameState = "options";
   background(150);
@@ -64,6 +68,7 @@ function mousePressed() {
   if (mouseButton === RIGHT) { // Handle right-clicks
     if (gameState === "options") {
       gameState = "menu"; // Return to menu
+      //s_menu_select.play();
     }
   }
 }

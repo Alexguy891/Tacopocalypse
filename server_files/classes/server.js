@@ -4,7 +4,7 @@ class Ingredient extends Entity {
 
     // ingredient name
     this.name = name;
-
+    
     // sprite path for image
     this.spritePath = spritePath;
 
@@ -26,16 +26,18 @@ class Ingredient extends Entity {
       if (mouseX > this.positionArray[0] && mouseX < this.positionArray[0] + this.collisionArray[1] 
           && mouseY > this.positionArray[1] && mouseY < this.positionArray[1] + this.collisionArray[0]) {
           this.isDragged = true;
-
+            if(gameState =='server'){s_grab.play();}
           // track dragging coords
           this.mouseOffsetX = this.positionArray[0] - mouseX;
           this.mouseOffsetY = this.positionArray[1] - mouseY;
+          
       }
   }
 
   // reset drag variable after release
   release() {
       this.isDragged = false;
+      //s_grab
   }
 
   // update position when dragged

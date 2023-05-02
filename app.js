@@ -280,6 +280,16 @@ function setup() {
     // for flashing effect
     damagedTruck = loadImage("runner_files/assets/Hit_Food_Truck.png");
     startingTruck = loadImage("runner_files/assets/Food_Truck.png");
+
+    //sounds!!!
+    s_menu_select = loadSound('sounds/menu_select.wav');
+    s_points = loadSound('sounds/points.wav');
+    s_jump = loadSound('sounds/Jump.wav');
+    s_damage = loadSound('sounds/damage.wav');
+    s_grab = loadSound('sounds/grab.wav');
+    s_win = loadSound('sounds/win.wav');
+    s_death = loadSound('sounds/GAMEOVER.wav');
+    s_runner_theme = loadSound('sounds/mainTheme.wav');
 }       
 
 
@@ -288,10 +298,12 @@ function draw() {
     if(gameState == States.start) {
         // show start screen
         image(startScreen, 0, 0, 720, 400);
-
+        //s_menu_select.play();
         // highlight start button if mouse over it
         if(mouseX > START_BUTTON_COORDINATES[0] && mouseY > START_BUTTON_COORDINATES[1] && mouseX < START_BUTTON_COORDINATES[2] && mouseY < START_BUTTON_COORDINATES[3]) {
             image(startScreenStartHighlight, 0, 0, 720, 400);
+            //s_menu_select.play();
+            
         }
 
         // highlight instructions button if mouse over it
@@ -304,7 +316,7 @@ function draw() {
     if(gameState == States.instructions) {
         // show instruction screen
         image(instructionScreen, 0, 0, 720, 400);
-
+        //s_menu_select.play();
         // highlight return button if mouse over it
         if(mouseX > INSTRUCTION_RETURN_BUTTON_COORDINATES[0] && mouseY > INSTRUCTION_RETURN_BUTTON_COORDINATES[1] && mouseX < INSTRUCTION_RETURN_BUTTON_COORDINATES[2] && mouseY < INSTRUCTION_RETURN_BUTTON_COORDINATES[3]) {
             image(instructionScreenReturnHighlight, 0, 0, 720, 400);
@@ -313,11 +325,13 @@ function draw() {
         // highlight start button if mouse over it
         if(mouseX > INSTRUCTION_START_BUTTON_COORDINATES[0] && mouseY > INSTRUCTION_START_BUTTON_COORDINATES[1] && mouseX < INSTRUCTION_START_BUTTON_COORDINATES[2] && mouseY < INSTRUCTION_START_BUTTON_COORDINATES[3]) {
             image(instructionScreenStartHightlight, 0, 0, 720, 400);
+            //s_menu_select.play();
         }
     }
 
     // check if game is in gameover state
     if(gameState == States.gameover) {
+        //s_runner_theme.stop();
         textSize(70)
         stroke(10, 100,10);
         fill(101, 67, 33);
@@ -341,7 +355,7 @@ function draw() {
         stroke(255);
         fill(101, 67, 33);
         strokeWeight(1);
-
+        
         if(runner.positionArray[0] < RUNNER_POS_X) {
             if(runner.positionArray[0] < -20 && loopCount < 1) {
                 showTransitionToRunner = true;
@@ -408,6 +422,8 @@ function draw() {
 
                     // switch to server state
                     gameState = States.server;
+                    s_win.play();
+                    //s_runner_theme.stop();
                 }
             } else {
                 // generate obstacle after random time
@@ -448,10 +464,12 @@ function draw() {
         if(runner.dead) {
             gameState = States.gameover;
             runner.dead = false;
+            //s_runner_theme.stop();
+            s_death.play();
         }
 
         // display runner
-        runner.show();
+        //runner.show();
         
         // displays UI elements
         text("Score: " + playerScore, 10, 20);
@@ -461,7 +479,7 @@ function draw() {
         for (let i = 0; i < OBSTACLE_ARRAY.length; i++) {
             OBSTACLE_ARRAY[i].show();
         }
-        
+        runner.show();//moved so car overlaps obstacles
         // checking for collision of all obstacles
         for (let i = 0; i < OBSTACLE_ARRAY.length; i++) {
             // check each for collision
@@ -522,7 +540,8 @@ function draw() {
 
             // switch state
             gameState = States.runner;
-
+            s_win.play();
+            //s_runner_theme.play();
             // start runner timer
             resetRunnerTimer();
         }
@@ -540,6 +559,7 @@ function draw() {
 
          // generate order after previous order is complete
          if(order.isComplete(currentIngredientStack)) {
+            s_points.play();//sounds!
             order = generateOrder();
             ingredientStack = new Ingredient(INGREDIENT_STACK_COORDINATES[0], INGREDIENT_STACK_COORDINATES[1], "server_files/assets/Taco_Shell.png", "stack");
             ingredientStack.positionArray[0] = ingredientStack.centerArray[0];
@@ -650,7 +670,10 @@ function mousePressed() {
         if(runner.positionArray[1] + runner.collisionArray[1] >= GROUND_Y) {
             // increase upwards velocity
             runner.velocity = -50;
+            s_jump.play();
         }
+    }else if(gameState == States.start || gameState == States.gameover || gameState == States.instructions){
+        s_menu_select.play();
     }
 }
 
@@ -750,6 +773,7 @@ function mouseReleased() {
     if (mouseX > TRASH_COORDINATES[0] && mouseY > TRASH_COORDINATES[1] && mouseX < TRASH_COORDINATES[2] && mouseY < TRASH_COORDINATES[3]) {
         if(ingredient.isDragged) {
             showIngredient = false;
+            s_damage.play();
         }
 
         if (ingredientStack.isDragged) {

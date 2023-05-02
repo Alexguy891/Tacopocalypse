@@ -1,6 +1,6 @@
 // length of time between hits
 var hitResetTimer = 2000;
-var squishResetTimer = 1000;
+var squishResetTimer = 500;
 
 // for current hit timer
 var currentResetTimer = -1;
@@ -53,6 +53,7 @@ class RunnerEntity extends Entity {
             if(millis() > currentResetTimer) {
               // reduce lives by damage amount
               this.livesAmount -= ObstacleEntity.lifeDamage;
+              s_damage.play(); //sounds!!
               // reset timer
               currentResetTimer = millis() + hitResetTimer;
             }
@@ -62,6 +63,7 @@ class RunnerEntity extends Entity {
               playerScore += 25; //get 25 points for killing zombie;
               ObstacleEntity.squished = true;
               currentSquishTimer = millis() + squishResetTimer;
+              s_points.play();
               //console.log(currentRunnerTimer)
             }
           }
@@ -94,10 +96,10 @@ class RunnerEntity extends Entity {
       this.velocity /= 1.2;
       
       // spacebar jump
-      if(keyIsDown(32) && this.positionArray[1] + this.collisionArray[1] >= groundY) {
+      if((keyIsDown(32) || mouseIsPressed) && this.positionArray[1] + this.collisionArray[1] >= groundY) {
         // increase upwards velocity
         this.velocity = -50;
-
+        s_jump.play();
         // reset key press
         keyCode = DOWN_ARROW;
       }
