@@ -37,7 +37,6 @@ function keyPressed() {
   if (keyCode === 32) {
     gameState = "game";
     //s_menu_select.play();
-    s_runner_theme.play();
     }
   }
 }
