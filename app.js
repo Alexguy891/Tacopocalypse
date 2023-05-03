@@ -171,6 +171,10 @@ PLATE_COORDINATES = [356, 241, 539, 377];
 // ingredient stack coordinates
 INGREDIENT_STACK_COORDINATES = [(PLATE_COORDINATES[0] + PLATE_COORDINATES[2]) / 2, (PLATE_COORDINATES[1] + PLATE_COORDINATES[3]) / 2];
 
+// lives image constants
+let LIVES_IMAGE_COORDINATES = [-2, -15];
+let LIVES_IMAGE_SIZE = [110, 110];
+
 // taco image assets
 TACO_1 = "server_files/assets/taco01.png";
 TACO_2 = "server_files/assets/taco02.png";
@@ -267,6 +271,12 @@ function setup() {
     // load transition screens
     runnerToServerScreen = loadImage("menus/assets/runnertoserver.png");
     serverToRunnerScreen = loadImage("menus/assets/servertorunner.png");
+
+    // load life images
+    fourHearts = loadImage("runner_files/assets/4hearts.png");
+    threeHearts = loadImage("runner_files/assets/3hearts.png");
+    twoHearts = loadImage("runner_files/assets/2hearts.png");
+    oneHeart = loadImage("runner_files/assets/1heart.png");
 
     // ingredient declaration
     ingredient = new Ingredient(0, 0, "server_files/assets/Ground_Beef.png", "beef");
@@ -473,7 +483,7 @@ function draw() {
         
         // displays UI elements
         text("Score: " + playerScore, 10, 20);
-        text("Lives: " + runner.livesAmount, 10, 40);
+        displayLives();
 
         // show obstacles
         for (let i = 0; i < OBSTACLE_ARRAY.length; i++) {
@@ -1011,4 +1021,23 @@ function resetRunnerTimer() {
 function resetServerTimer() {
     // set timer to current time + timer length
     currentServerTimer = millis() + serverTimer;
+}
+
+function displayLives() {
+    switch(runner.livesAmount) {
+        case 4:
+            image(fourHearts, LIVES_IMAGE_COORDINATES[0], LIVES_IMAGE_COORDINATES[1], LIVES_IMAGE_SIZE[0], LIVES_IMAGE_SIZE[1]);
+            break;
+        case 3:
+            image(threeHearts, LIVES_IMAGE_COORDINATES[0], LIVES_IMAGE_COORDINATES[1], LIVES_IMAGE_SIZE[0], LIVES_IMAGE_SIZE[1]);
+            break;
+        case 2:
+            image(twoHearts, LIVES_IMAGE_COORDINATES[0], LIVES_IMAGE_COORDINATES[1], LIVES_IMAGE_SIZE[0], LIVES_IMAGE_SIZE[1]);
+            break;
+        case 1:
+            image(oneHeart, LIVES_IMAGE_COORDINATES[0], LIVES_IMAGE_COORDINATES[1], LIVES_IMAGE_SIZE[0], LIVES_IMAGE_SIZE[1]);
+            break;
+        default:
+            break;
+    }
 }
