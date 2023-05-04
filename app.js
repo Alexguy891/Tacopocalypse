@@ -591,7 +591,6 @@ function draw() {
 
             // displays UI elements
             text("Score: " + playerScore, 10, 20);
-            text("Lives: " + runner.livesAmount, 10, 40);
             text("Time: " + (Math.round((currentServerTimer - millis()) / 1000 * 100) / 100).toFixed(2) + "s", 330, 140);
         } else {
             image(runnerToServerScreen, 0, 0, 720, 400);
