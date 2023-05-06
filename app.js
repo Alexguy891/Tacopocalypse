@@ -30,8 +30,8 @@ var currentRunnerTimer = runnerTimer;
 var currentServerTimer = serverTimer;
 
 // start menu button coordinates
-let START_BUTTON_COORDINATES = [175, 231, 527, 290];
-let INSTRUCTIONS_BUTTON_COORDINATES = [575, 7, 679, 41];
+let START_BUTTON_COORDINATES = [170, 224, 532, 291];
+let INSTRUCTIONS_BUTTON_COORDINATES = [504, 19, 632, 64];
 
 // instruction menu button coordinates
 let INSTRUCTION_START_BUTTON_COORDINATES = [591, 101, 657, 249];
@@ -304,6 +304,8 @@ function setup() {
 
 
 function draw() {
+    console.log(mouseX + ", " + mouseY);
+
     // check if game is in start state
     if(gameState == States.start) {
         // show start screen
